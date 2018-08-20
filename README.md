@@ -16,18 +16,18 @@ And then execute:
 $ bundle install
 ```
 
-Next, you need to run the generator:
+Next, you need to run the install generator:
 ```bash
 $ rails generate growth:install
 ```
 
 Running the install generator does two things:
 
-1. Mounts the stats engine at 'localhost:3000/stats' by adding to your routes.rb
+1. Mounts the stats engine at '/stats' by adding to your routes.rb
 
 ```ruby
 Rails.application.routes.draw do
-	mount Growth::Engine, at: "/stats"
+  mount Growth::Engine, at: "/stats"
 end
 ```
 
@@ -37,7 +37,7 @@ end
 Growth.models_to_measure = ApplicationRecord.descendants.map { |model| model.to_s }
 ```
 
-```ruby Growth.models_to_measure ``` takes an array of models as strings, ex. ["Posts", "Users", "Comments"].  The default measures all models.
+```Growth.models_to_measure ``` takes an array of models as strings, ex. ["Posts", "Users", "Comments"].  The default measures all models.
 
 
 ## Contributing
