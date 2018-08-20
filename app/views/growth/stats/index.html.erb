@@ -1,0 +1,55 @@
+<div class="container">
+	<p>Select a year</p>
+
+	<%= form_tag '/stats', method: :get do %>
+	  <%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year) %>
+	  <%= submit_tag("search") %>
+	<% end %>
+
+	<table border="1">
+	  <tr>
+	    <td>Title</td>
+	    <td>January</td>
+	    <td>February</td>
+	    <td>March</td>
+	    <td>April</td>
+	    <td>May</td>
+	    <td>June</td>
+	    <td>July</td>
+	    <td>August</td>
+	    <td>September</td>
+	    <td>October</td>
+	    <td>November</td>
+	    <td>December</td>
+	  </tr>
+
+	  <% @models.each do |model| %>
+	    <tr>
+	      <td><p class="title"><%= model.pluralize %></p></td>
+	      <% (1..12).each do |month| %>
+	        <td>
+	          <%= by_month(by_year(model.constantize, @year), month).count %>
+	        </td>
+	      <% end %>
+	    </tr>
+
+	    <tr>
+	      <td></td>
+	      <% (1..12).each do |month| %>
+	        <% current_month_count = by_month(by_year(model.constantize, @year), month).count %>
+	        <% before_current_month_count = by_month(by_year(model.constantize, @year), month - 1).count %>
+
+	        <td><%= increase_in_percentage(current_month_count, before_current_month_count) %></td>
+	      <% end %>
+	    </tr>
+	  <% end %>
+	</table>
+	
+	<% @models.each do |model| %>
+		<div class="form-group">
+			<h1><%= model %>
+			<div><%= line_chart model.constantize.group_by_month(:created_at).unscope(:order).count %></div>
+		</div>
+	<% end %>
+	
+</div>
