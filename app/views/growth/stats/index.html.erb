@@ -5,9 +5,7 @@
 	  <%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year) %>
 	  <%= submit_tag("search") %>
 	<% end %>
-	
-	<%= @models %>
-	
+		
 	<table border="1">
 	  <tr>
 	    <td>Title</td>
@@ -29,7 +27,7 @@
 	      <td><p class="title"><%= model %></p></td>
 	      <% (1..12).each do |month| %>
 	        <td>
-	          <%= by_month(by_year(model, @year), month).count %>
+	          <%= by_month(by_year(model.constantize, @year), month).count %>
 	        </td>
 	      <% end %>
 	    </tr>
@@ -37,8 +35,8 @@
 	    <tr>
 	      <td></td>
 	      <% (1..12).each do |month| %>
-	        <% current_month_count = by_month(by_year(model, @year), month).count %>
-	        <% before_current_month_count = by_month(by_year(model, @year), month - 1).count %>
+	        <% current_month_count = by_month(by_year(model.constantize, @year), month).count %>
+	        <% before_current_month_count = by_month(by_year(model.constantize, @year), month - 1).count %>
 
 	        <td><%= increase_in_percentage(current_month_count, before_current_month_count) %></td>
 	      <% end %>
@@ -49,7 +47,7 @@
 	<% @models.each do |model| %>
 		<div class="form-group">
 			<h1><%= model %>
-			<div><%= line_chart model.group_by_month(:created_at).unscope(:order).count %></div>
+			<div><%= line_chart model.constantize.group_by_month(:created_at).unscope(:order).count %></div>
 		</div>
 	<% end %>
 	
