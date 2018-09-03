@@ -1,4 +1,7 @@
 <div class="container">
+	
+	<h1>Growth</h1>
+	
 	<p>Select a year</p>
 		
 	<%= form_tag '/stats', method: :get do %>
@@ -6,7 +9,7 @@
 	  <%= submit_tag("search") %>
 	<% end %>
 		
-	<table border="1">
+	<table class="table table-bordered">
 	  <tr>
 	    <td>Title</td>
 	    <td>January</td>
@@ -24,11 +27,9 @@
 	  </tr>
 	  <% @models.each do |model| %>
 	    <tr>
-	      <td><p class="title"><%= model %></p></td>
+	      <td><p><%= model.pluralize %></p></td>
 	      <% (1..12).each do |month| %>
-	        <td>
-	          <%= by_month(by_year(model.constantize, @year), month).count %>
-	        </td>
+	        <td><%= by_month(by_year(model.constantize, @year), month).count %></td>
 	      <% end %>
 	    </tr>
 
@@ -38,17 +39,99 @@
 	        <% current_month_count = by_month(by_year(model.constantize, @year), month).count %>
 	        <% before_current_month_count = by_month(by_year(model.constantize, @year), month - 1).count %>
 
-	        <td><%= increase_in_percentage(current_month_count, before_current_month_count) %></td>
+	        <td><%= change_in_percentage(current_month_count, before_current_month_count) %></td>
 	      <% end %>
 	    </tr>
 	  <% end %>
 	</table>
 	
-	<% @models.each do |model| %>
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Totals</h1>
+		  <% @models.each do |model| %>
+				<p><%= model.constantize %> - <%= model.constantize.count %></p>
+			<% end %>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="mb-5">
+				<h1>Associations</h1>
+			  <% @models.each do |model| %>
+					<div class="mb-3">
+						<div><b><%= model %></b></div>
+					  <% model.constantize.reflect_on_all_associations(:has_many).each do |a| %>
+							<span><%= a.plural_name.titleize %></span>-
+						<% end %>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	
+	<div class="mt-2">
+		<p>Companies that have created campaigns: <%= Company.joins(:campaigns).distinct.count %></p>
+		<p>Total campaigns created: <%= Campaign.count %></p>
+		
+		<% counts = {} %>
+		<% Company.joins(:campaigns).group("companies.id").order("campaigns.count ASC").count.each do |k,v| %>
+		  <% counts.has_key?(v) ? counts[v] += 1 : counts[v] = 1 %>
+		<% end %>
+		
+	  <p>Number of campaigns a company has created:</p>
+		<table border="1" cellpadding="10">
+		  <tr>
+			  <td># of campaigns per company</td>
+	      <% counts.each do |k,v| %>
+	        <td><%= k %></td>
+	      <% end %>
+		  </tr>
+		  <tr>
+			  <td>Companies who have created # of campaigns</td>
+	      <% counts.each do |k,v| %>
+	        <td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %></td>
+	      <% end %>
+		  </tr>
+		  <tr>
+			  <td>Days between creation of 1st and last campaign</td>
+	      <% counts.each do |k,v| %>
+	        <% if k == 1 %>
+	          <td></td>
+	        	<% next %>
+	        <% end %>
+	        <td>
+		        <% seven_days_or_less, between_seven_and_twenty, twenty_one_days_or_more = 0, 0, 0 %>
+	
+					  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
+		           <% company = Company.find(key) %>
+	           	           
+							 <% t = company.campaigns[0].created_at.time - company.campaigns[k-1].created_at.time %>
+					     <% mm, ss = t.divmod(60) %>
+					     <% hh, mm = mm.divmod(60) %>
+					     <% dd, hh = hh.divmod(24) %>
+					     <% if dd <= 7 %>
+					       <% seven_days_or_less += 1 %>
+					     <% elsif dd >= 21 %>
+					       <% twenty_one_days_or_more += 1 %>
+						   <% else %>
+						     <% between_seven_and_twenty += 1 %>
+					     <% end %>
+		        <% end %>
+		        <p> <=7 days: <%= seven_days_or_less %></p>
+		        <p> 7-21 days: <%= between_seven_and_twenty %></p>
+						<p> >=21 days: <%= twenty_one_days_or_more %></p>
+		      </td>
+	      <% end %>
+		  </tr>
+		</table>
+	</div>
+	
+	<!-- <% @models.each do |model| %>
 		<div class="form-group">
 			<h1><%= model %>
 			<div><%= line_chart model.constantize.group_by_month(:created_at).unscope(:order).count %></div>
 		</div>
-	<% end %>
+	<% end %> -->
 	
 </div>

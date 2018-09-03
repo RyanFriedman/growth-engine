@@ -1,6 +1,6 @@
 module Growth
   module StatsHelper
-    def increase_in_percentage(new_number, original_number)
+    def change_in_percentage(new_number, original_number)
       if new_number == original_number
         return "0"
       end
@@ -10,11 +10,11 @@ module Growth
       if new_number > original_number
         increase = new_number - original_number
         increase_in_percentage = (increase / original_number.to_f) * 100
-        "+ #{increase_in_percentage.round(1)}%"
+        "<p class='increase'>+#{increase_in_percentage.round(1)}%</p>".html_safe
       else
         decrease = original_number - new_number
         decrease_in_percentage = (decrease / original_number.to_f) * 100
-        "- #{decrease_in_percentage.round(1)}%"
+        "<p class='decrease'>-#{decrease_in_percentage.round(1)}%</p>".html_safe
       end
     end
 

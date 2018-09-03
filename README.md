@@ -37,7 +37,12 @@ end
 Growth.models_to_measure = ApplicationRecord.descendants.map { |model| model.to_s }
 ```
 
-```Growth.models_to_measure ``` takes an array of models as strings, ex. ["Posts", "Users", "Comments"].  The default measures all models.
+```Growth.models_to_measure ``` takes an array of models as strings, ex. ["Posts", "Users", "Comments"], that you'd like to measure.  The default measures all models.
+
+```Growth.model_blacklist``` takes an array of models as strings, ex. ["AdminUsers"], that you want to prevent the gem from measuring.
+
+```Growth.username ``` is your username for http_basic_auth
+```Growth.password``` is your password for http_basic_auth
 
 
 ## Contributing
