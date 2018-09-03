@@ -105,11 +105,16 @@
 	
 					  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
 		           <% company = Company.find(key) %>
+							 
+							 <% first_campaign = company.campaigns[0].created_at.time %>
+							 <% last_campaign = company.campaigns[k-1].created_at.time %>
 	           	           
-							 <% t = company.campaigns[0].created_at.time - company.campaigns[k-1].created_at.time %>
+							 <% t = first_campaign - last_campaign %>
+							 
 					     <% mm, ss = t.divmod(60) %>
 					     <% hh, mm = mm.divmod(60) %>
 					     <% dd, hh = hh.divmod(24) %>
+							 
 					     <% if dd <= 7 %>
 					       <% seven_days_or_less += 1 %>
 					     <% elsif dd >= 21 %>
@@ -117,6 +122,7 @@
 						   <% else %>
 						     <% between_seven_and_twenty += 1 %>
 					     <% end %>
+							 
 		        <% end %>
 		        <p> <=7 days: <%= seven_days_or_less %></p>
 		        <p> 7-21 days: <%= between_seven_and_twenty %></p>
