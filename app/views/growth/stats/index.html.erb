@@ -79,18 +79,15 @@
 		  <% counts.has_key?(v) ? counts[v] += 1 : counts[v] = 1 %>
 		<% end %>
 		
+    <% counts.each do |k,v| %>
+    	<p><b><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %> companies</b> have created <b><%= k %> campaign</b></p>				
+    <% end %>
+		
 	  <p>Number of campaigns a company has created:</p>
 		<table border="1" cellpadding="10">
 		  <tr>
-			  <td># of campaigns per company</td>
 	      <% counts.each do |k,v| %>
-	        <td><%= k %></td>
-	      <% end %>
-		  </tr>
-		  <tr>
-			  <td>Companies who have created # of campaigns</td>
-	      <% counts.each do |k,v| %>
-	        <td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %></td>
+        	<td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %> companies have created <%= k %> campaign</td>				
 	      <% end %>
 		  </tr>
 		  <tr>
