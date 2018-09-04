@@ -29,5 +29,12 @@ module Growth
     def by_day(model, day)
       model.where('extract(day from created_at) = ?', day)
     end
+      
+  end
+end
+
+class Float
+  def signif(signs)
+    Float("%.#{signs}g" % self)
   end
 end

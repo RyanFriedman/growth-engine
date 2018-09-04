@@ -71,7 +71,8 @@
 	</div>
 	
 	<div class="mt-2">
-		<p>Companies that have created campaigns: <%= Company.joins(:campaigns).distinct.count %></p>
+		<% @companies_with_campaigns = Company.joins(:campaigns).distinct.count %>
+		<p>Companies that have created campaigns: <%= @companies_with_campaigns %></p>
 		<p>Total campaigns created: <%= Campaign.count %></p>
 		
 		<% counts = {} %>
@@ -80,14 +81,48 @@
 		<% end %>
 		
     <% counts.each do |k,v| %>
-    	<p><b><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %> companies</b> have created <b><%= k %> campaign</b></p>				
+      <p><b><%= v %> companies</b> have created <b><%= k %> campaigns (<%= ( v.to_f / @companies_with_campaigns.to_f ).signif(2) * 100 %>% of companies)</b></p>
+			
+      <% seven_days_or_less, between_seven_and_twenty, twenty_one_days_or_more = 0, 0, 0 %>
+			
+		  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
+         <% company = Company.find(key) %>
+				 
+				 <% first_campaign = company.campaigns[0].created_at.time %>
+				 <% last_campaign = company.campaigns[k-1].created_at.time %>
+       	           
+				 <% t = first_campaign - last_campaign %>
+				 
+		     <% mm, ss = t.divmod(60) %>
+		     <% hh, mm = mm.divmod(60) %>
+		     <% dd, hh = hh.divmod(24) %>
+		     <% if dd <= 7 %>
+		       <% seven_days_or_less += 1 %>
+		     <% elsif dd >= 21 %>
+		       <% twenty_one_days_or_more += 1 %>
+			   <% else %>
+			     <% between_seven_and_twenty += 1 %>
+		     <% end %>
+      <% end %>
+			
+			<div class="ml-5">
+	      <p><%= seven_days_or_less %> of these companies created their first and last campaign within 7 days</p>
+	      <p><%= between_seven_and_twenty %> of these companies created their first and last campaign between 7 and 21 days</p>
+				<p><%= twenty_one_days_or_more %> of these companies created their first and last campaign over 21 days apart (HIGH RETENTION)</p>
+			</div>
     <% end %>
 		
-	  <p>Number of campaigns a company has created:</p>
-		<table border="1" cellpadding="10">
+		<!-- <table border="1" cellpadding="10">
 		  <tr>
+			  <td># of campaigns per company</td>
 	      <% counts.each do |k,v| %>
-        	<td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %> companies have created <%= k %> campaign</td>				
+	        <td><%= k %></td>
+	      <% end %>
+		  </tr>
+		  <tr>
+			  <td>Companies who have created # of campaigns</td>
+	      <% counts.each do |k,v| %>
+	        <td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %></td>
 	      <% end %>
 		  </tr>
 		  <tr>
@@ -99,19 +134,18 @@
 	        <% end %>
 	        <td>
 		        <% seven_days_or_less, between_seven_and_twenty, twenty_one_days_or_more = 0, 0, 0 %>
-	
+
 					  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
 		           <% company = Company.find(key) %>
-							 
+
 							 <% first_campaign = company.campaigns[0].created_at.time %>
 							 <% last_campaign = company.campaigns[k-1].created_at.time %>
-	           	           
+
 							 <% t = first_campaign - last_campaign %>
-							 
+
 					     <% mm, ss = t.divmod(60) %>
 					     <% hh, mm = mm.divmod(60) %>
 					     <% dd, hh = hh.divmod(24) %>
-							 
 					     <% if dd <= 7 %>
 					       <% seven_days_or_less += 1 %>
 					     <% elsif dd >= 21 %>
@@ -119,7 +153,7 @@
 						   <% else %>
 						     <% between_seven_and_twenty += 1 %>
 					     <% end %>
-							 
+
 		        <% end %>
 		        <p> <=7 days: <%= seven_days_or_less %></p>
 		        <p> 7-21 days: <%= between_seven_and_twenty %></p>
@@ -127,7 +161,7 @@
 		      </td>
 	      <% end %>
 		  </tr>
-		</table>
+		</table> -->
 	</div>
 	
 	<!-- <% @models.each do |model| %>
