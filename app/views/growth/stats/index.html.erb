@@ -1,14 +1,13 @@
 <div class="container">
-	
 	<h1>Growth</h1>
-	
+
 	<p>Select a year</p>
-		
+
 	<%= form_tag '/stats', method: :get do %>
 	  <%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year) %>
 	  <%= submit_tag("search") %>
 	<% end %>
-		
+
 	<table class="table table-bordered">
 	  <tr>
 	    <td>Title</td>
@@ -25,7 +24,7 @@
 	    <td>November</td>
 	    <td>December</td>
 	  </tr>
-	  <% @models.each do |model| %>
+	  <% get_models.each do |model| %>
 	    <tr>
 	      <td><p><%= model.pluralize %></p></td>
 	      <% (1..12).each do |month| %>
@@ -44,131 +43,56 @@
 	    </tr>
 	  <% end %>
 	</table>
-	
+
 	<div class="row">
 		<div class="col-md-12">
 			<h1>Totals</h1>
-		  <% @models.each do |model| %>
+		  <% get_models.each do |model| %>
 				<p><%= model.constantize %> - <%= model.constantize.count %></p>
 			<% end %>
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<div class="mb-5">
-				<h1>Associations</h1>
-			  <% @models.each do |model| %>
-					<div class="mb-3">
-						<div><b><%= model %></b></div>
-					  <% model.constantize.reflect_on_all_associations(:has_many).each do |a| %>
-							<span><%= a.plural_name.titleize %></span>-
-						<% end %>
-					</div>
-				<% end %>
-			</div>
-		</div>
-	</div>
-	
-	<div class="mt-2">
-		<% @companies_with_campaigns = Company.joins(:campaigns).distinct.count %>
-		<p>Companies that have created campaigns: <%= @companies_with_campaigns %></p>
-		<p>Total campaigns created: <%= Campaign.count %></p>
-		
-		<% counts = {} %>
-		<% Company.joins(:campaigns).group("companies.id").order("campaigns.count ASC").count.each do |k,v| %>
-		  <% counts.has_key?(v) ? counts[v] += 1 : counts[v] = 1 %>
-		<% end %>
-		
-    <% counts.each do |k,v| %>
-      <p><b><%= v %> companies</b> have created <b><%= k %> campaigns (<%= ( v.to_f / @companies_with_campaigns.to_f ).signif(2) * 100 %>% of companies)</b></p>
-			
-      <% seven_days_or_less, between_seven_and_twenty, twenty_one_days_or_more = 0, 0, 0 %>
-			
-		  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
-         <% company = Company.find(key) %>
-				 
-				 <% first_campaign = company.campaigns[0].created_at.time %>
-				 <% last_campaign = company.campaigns[k-1].created_at.time %>
-       	           
-				 <% t = first_campaign - last_campaign %>
-				 
-		     <% mm, ss = t.divmod(60) %>
-		     <% hh, mm = mm.divmod(60) %>
-		     <% dd, hh = hh.divmod(24) %>
-		     <% if dd <= 7 %>
-		       <% seven_days_or_less += 1 %>
-		     <% elsif dd >= 21 %>
-		       <% twenty_one_days_or_more += 1 %>
-			   <% else %>
-			     <% between_seven_and_twenty += 1 %>
-		     <% end %>
+
+  <h1>Associations</h1>
+  <%= form_tag '/stats', method: :get, class: 'mb-5' do %>
+    <%= select_tag 'models', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model') %>
+    <%= submit_tag("submit") %>
+  <% end %>
+
+  <% if @parent_model.present? && @child_model.present? %>
+    <div class="mt-2">
+      <p><%= pluralize_constant(@parent_model).capitalize %> that have created <%= pluralize_constant(@child_model) %>: <%= @model_joined_with_child.count %></p>
+      <p>Total <%= pluralize_constant(@child_model) %> created: <%= @child_model.count %></p>
+
+      <% @counts.each do |k, v| %>
+        <p><b><%= v %> <%= pluralize_constant(@parent_model) %></b> have created <b><%= k %> <%= pluralize_constant(@child_model) %> (<%= ( v.to_f / @model_joined_with_child.distinct.count.to_f ).signif(2) * 100 %>% of <%= pluralize_constant(@parent_model).capitalize %>)</b></p>
+
+        <% @grouped_model_joined_with_child.having("count(#{pluralize_constant(@child_model)}.id) = ?", k).count.each do |key, value| %>
+           <% company = @parent_model.find(key) %>
+
+           <% first_campaign = company.public_send(pluralize_constant(@child_model))[0].created_at.time %>
+           <% last_campaign = company.public_send(pluralize_constant(@child_model))[k-1].created_at.time %>
+
+           <% t = first_campaign - last_campaign %>
+
+           <% mm, ss = t.divmod(60) %>
+           <% hh, mm = mm.divmod(60) %>
+           <% dd, hh = hh.divmod(24) %>
+           <% if dd <= 7 %>
+             <% @seven_days_or_less += 1 %>
+           <% elsif dd >= 21 %>
+             <% @twenty_one_days_or_more += 1 %>
+           <% else %>
+             <% @between_seven_and_twenty += 1 %>
+           <% end %>
+        <% end %>
+
+        <div class="ml-5">
+          <p><%= @seven_days_or_less %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> within 7 days</p>
+          <p><%= @between_seven_and_twenty %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> between 7 and 21 days</p>
+          <p><%= @twenty_one_days_or_more %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
+        </div>
       <% end %>
-			
-			<div class="ml-5">
-	      <p><%= seven_days_or_less %> of these companies created their first and last campaign within 7 days</p>
-	      <p><%= between_seven_and_twenty %> of these companies created their first and last campaign between 7 and 21 days</p>
-				<p><%= twenty_one_days_or_more %> of these companies created their first and last campaign over 21 days apart (HIGH RETENTION)</p>
-			</div>
-    <% end %>
-		
-		<!-- <table border="1" cellpadding="10">
-		  <tr>
-			  <td># of campaigns per company</td>
-	      <% counts.each do |k,v| %>
-	        <td><%= k %></td>
-	      <% end %>
-		  </tr>
-		  <tr>
-			  <td>Companies who have created # of campaigns</td>
-	      <% counts.each do |k,v| %>
-	        <td><%= Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.keys.count %></td>
-	      <% end %>
-		  </tr>
-		  <tr>
-			  <td>Days between creation of 1st and last campaign</td>
-	      <% counts.each do |k,v| %>
-	        <% if k == 1 %>
-	          <td></td>
-	        	<% next %>
-	        <% end %>
-	        <td>
-		        <% seven_days_or_less, between_seven_and_twenty, twenty_one_days_or_more = 0, 0, 0 %>
-
-					  <% Company.joins(:campaigns).group("companies.id").having("count(campaigns.id) = ?", k).count.each do |key, value| %>
-		           <% company = Company.find(key) %>
-
-							 <% first_campaign = company.campaigns[0].created_at.time %>
-							 <% last_campaign = company.campaigns[k-1].created_at.time %>
-
-							 <% t = first_campaign - last_campaign %>
-
-					     <% mm, ss = t.divmod(60) %>
-					     <% hh, mm = mm.divmod(60) %>
-					     <% dd, hh = hh.divmod(24) %>
-					     <% if dd <= 7 %>
-					       <% seven_days_or_less += 1 %>
-					     <% elsif dd >= 21 %>
-					       <% twenty_one_days_or_more += 1 %>
-						   <% else %>
-						     <% between_seven_and_twenty += 1 %>
-					     <% end %>
-
-		        <% end %>
-		        <p> <=7 days: <%= seven_days_or_less %></p>
-		        <p> 7-21 days: <%= between_seven_and_twenty %></p>
-						<p> >=21 days: <%= twenty_one_days_or_more %></p>
-		      </td>
-	      <% end %>
-		  </tr>
-		</table> -->
-	</div>
-	
-	<!-- <% @models.each do |model| %>
-		<div class="form-group">
-			<h1><%= model %>
-			<div><%= line_chart model.constantize.group_by_month(:created_at).unscope(:order).count %></div>
-		</div>
-	<% end %> -->
-	
+    </div>
+  <% end %>
 </div>

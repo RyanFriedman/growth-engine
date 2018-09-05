@@ -29,7 +29,26 @@ module Growth
     def by_day(model, day)
       model.where('extract(day from created_at) = ?', day)
     end
-      
+
+    def get_models
+      @models ||= Growth.models_to_measure - Growth.model_blacklist
+    end
+
+    def get_grouped_options
+      get_models.map do |model|
+        [
+            model,
+            model.constantize.reflect_on_all_associations(:has_many).map do |reflection|
+              reflection_source_name = reflection.source_reflection.name.to_s.capitalize
+              [reflection_source_name, "#{model}-#{reflection_source_name}"]
+            end
+        ]
+      end
+    end
+
+    def pluralize_constant(constant)
+      constant.to_s.downcase.pluralize
+    end
   end
 end
 
