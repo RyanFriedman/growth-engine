@@ -11,11 +11,12 @@ module Growth
 
       @model_joined_with_child = get_model_joined_with_child
       @grouped_model_joined_with_child = get_grouped_model_joined_with_child
+                  
       @counts = counts(get_grouped_model_joined_with_child)
-
+      
       @parent_model = get_parent_model
       @child_model = get_child_model
-
+            
       @seven_days_or_less, @between_seven_and_twenty, @twenty_one_days_or_more = 0, 0, 0
     end
 
@@ -35,7 +36,7 @@ module Growth
     end
 
     def get_model_joined_with_child
-      @joined_model ||= get_parent_model&.joins(pluralize_constant(get_child_model).to_sym)
+      @joined_model ||= get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).to_sym)
     end
 
     def get_grouped_model_joined_with_child
