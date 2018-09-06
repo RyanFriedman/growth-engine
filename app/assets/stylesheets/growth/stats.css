@@ -10,3 +10,9 @@
 .decrease {
 	color: #e74c3c;
 }
+
+.box {
+	border: 1px solid #DDD;
+	border-radius: 5px;
+	padding: 40px 20px;
+}

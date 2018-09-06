@@ -1,64 +1,81 @@
 <div class="container">
-	<h2>Growth</h2>
-
-	<p>Select a year</p>
-	<%= form_tag '/stats', method: :get do %>
-	  <%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year) %>
-	  <%= submit_tag("search") %>
-	<% end %>
-
-	<table class="table table-bordered">
-	  <tr>
-	    <td>Title</td>
-	    <td>January</td>
-	    <td>February</td>
-	    <td>March</td>
-	    <td>April</td>
-	    <td>May</td>
-	    <td>June</td>
-	    <td>July</td>
-	    <td>August</td>
-	    <td>September</td>
-	    <td>October</td>
-	    <td>November</td>
-	    <td>December</td>
-	  </tr>
-	  <% get_models.each do |model| %>
-	    <tr>
-	      <td><p><%= model.pluralize %></p></td>
-	      <% (1..12).each do |month| %>
-	        <td><%= by_month(by_year(model.constantize, @year), month).count %></td>
-	      <% end %>
-	    </tr>
-
-	    <tr>
-	      <td></td>
-	      <% (1..12).each do |month| %>
-	        <% current_month_count = by_month(by_year(model.constantize, @year), month).count %>
-	        <% before_current_month_count = by_month(by_year(model.constantize, @year), month - 1).count %>
-
-	        <td><%= change_in_percentage(current_month_count, before_current_month_count) %></td>
-	      <% end %>
-	    </tr>
-	  <% end %>
-	</table>
-
+	
+	<h2 class="mb-4">Totals</h2>
+	
 	<div class="row">
-		<div class="col-md-12">
-			<h2>Totals</h2>
-		  <% get_models.each do |model| %>
-				<div class="col-md-3">
-					<%= model.constantize %>
-					<%= model.constantize.count %>
+	  <% get_models.each do |model| %>
+			<div class="col-md-3">
+				<div class="text-center box">
+					<h2><%= number_with_delimiter(model.constantize.count, delimiter: ",") %></h2>
+					<p><%= pluralize_constant(model.constantize.to_s).capitalize %></p>
 				</div>
-			<% end %>
+			</div>
+		<% end %>
+	</div>
+	
+	<h2 class="mb-4">Growth</h2>
+
+	<%= form_tag '/stats', method: :get do %>
+		<div class="row">
+			<div class="col-md-2">
+	  		<%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year), class: "form-control" %>
+			</div>
+			<div class="col-md-2">
+				<%= submit_tag("Submit", class: "form-control btn-primary") %>
+			</div>
+		</div>
+	<% end %>
+	
+	<div class="row mt-2">
+		<div class="col-md-12">
+			<table class="table table-bordered">
+			  <tr>
+			    <td>Title</td>
+			    <td>January</td>
+			    <td>February</td>
+			    <td>March</td>
+			    <td>April</td>
+			    <td>May</td>
+			    <td>June</td>
+			    <td>July</td>
+			    <td>August</td>
+			    <td>September</td>
+			    <td>October</td>
+			    <td>November</td>
+			    <td>December</td>
+			  </tr>
+			  <% get_models.each do |model| %>
+			    <tr>
+			      <td><p><%= model.pluralize %></p></td>
+			      <% (1..12).each do |month| %>
+			        <td><%= by_month(by_year(model.constantize, @year), month).count %></td>
+			      <% end %>
+			    </tr>
+			    <tr>
+			      <td></td>
+			      <% (1..12).each do |month| %>
+			        <% current_month_count = by_month(by_year(model.constantize, @year), month).count %>
+			        <% before_current_month_count = by_month(by_year(model.constantize, @year), month - 1).count %>
+
+			        <td><%= change_in_percentage(current_month_count, before_current_month_count) %></td>
+			      <% end %>
+			    </tr>
+			  <% end %>
+			</table>
 		</div>
 	</div>
-
-  <h1>Associations</h1>
+	
+  <h2 class="my-4">Associations</h2>
+	
   <%= form_tag '/stats', method: :get, class: 'mb-5' do %>
-    <%= select_tag 'models', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model') %>
-    <%= submit_tag("submit") %>
+		<div class="row">
+			<div class="col-md-2">
+	    	<%= select_tag 'models', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model'), class: "form-control" %>
+			</div>
+			<div class="col-md-2">
+				<%= submit_tag("Submit", class: "form-control btn-primary") %>
+			</div>
+		</div>
   <% end %>
 
   <% if @parent_model.present? && @child_model.present? %>
