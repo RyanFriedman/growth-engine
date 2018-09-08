@@ -1,0 +1,43 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+
+.increase {
+	color: #2ecc71;
+	background-color: #e8f5e9;
+	display: inline;
+	padding: 10px;
+	border-radius: 10em;
+	float: right;
+}
+
+.decrease {
+	color: #e74c3c;
+	background-color: #ffebee;
+	display: inline;
+	padding: 10px;
+	border-radius: 10em;
+	float: right;
+}
+
+.box {
+	border: 1px solid #DDD;
+	border-radius: 5px;
+	padding: 20px;
+	background-color: #FFF;
+	
+	h6 {
+		color: #72777a;
+	}
+}
+
+.table {
+	background-color: #FFF !important;
+	border-radius: 5px;
+}
+
+body {
+	background-color: rgb(249, 250, 251) !important;
+	padding: 20px 60px;
+}

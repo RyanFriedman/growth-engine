@@ -38,7 +38,7 @@ module Growth
       get_models.map do |model|
         [
             model,
-            model.constantize.reflect_on_all_associations(:has_many).map do |reflection|
+            model.reflect_on_all_associations(:has_many).map do |reflection|
               reflection_source_name = reflection.source_reflection.name.to_s.capitalize
               [reflection_source_name, "#{model}-#{reflection_source_name}"]
             end

@@ -1,0 +1,12 @@
+<h2 class="my-4">Totals</h2>
+
+<div class="row">
+  <% get_models.each do |model| %>
+		<div class="col-md-2">
+			<div class="box">
+				<h6><%= pluralize_constant(model.to_s).capitalize %></h6>
+				<h2><%= number_with_delimiter(model.count, delimiter: ",") %></h2>
+			</div>
+		</div>
+	<% end %>
+</div>

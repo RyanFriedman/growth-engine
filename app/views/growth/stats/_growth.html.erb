@@ -1,0 +1,48 @@
+<h2 class="my-4">Growth</h2>
+
+<%= form_tag '/stats', method: :get do %>
+	<div class="row">
+		<div class="col-md-2">
+  		<%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year), class: "form-control" %>
+		</div>
+		<div class="col-md-1">
+			<%= submit_tag("Submit", class: "form-control btn-primary") %>
+		</div>
+	</div>
+<% end %>
+
+<div class="row mt-2">
+	<div class="col-md-12">
+		<table class="table table-bordered">
+		  <tr>
+		    <td>Title</td>
+		    <td>January</td>
+		    <td>February</td>
+		    <td>March</td>
+		    <td>April</td>
+		    <td>May</td>
+		    <td>June</td>
+		    <td>July</td>
+		    <td>August</td>
+		    <td>September</td>
+		    <td>October</td>
+		    <td>November</td>
+		    <td>December</td>
+		  </tr>
+		  <% get_models.each do |model| %>
+		    <tr>
+		      <td><p><%= model.to_s.pluralize %></p></td>
+		      <% (1..12).each do |month| %>
+	        	<% current_month_count = by_month(by_year(model, @year), month).count %>
+	        	<% before_current_month_count = by_month(by_year(model, @year), month - 1).count %>
+					
+		        <td>
+							<span><%= by_month(by_year(model, @year), month).count %></span>
+							<span><%= change_in_percentage(current_month_count, before_current_month_count) %></span>
+						</td>
+		      <% end %>
+		    </tr>
+		  <% end %>
+		</table>
+	</div>
+</div>
