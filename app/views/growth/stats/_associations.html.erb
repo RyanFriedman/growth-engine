@@ -13,7 +13,7 @@
 
 <% if @parent_model.present? && @child_model.present? %>
   <div class="mt-2">
-    <p><%= pluralize_constant(@parent_model).capitalize %> that have created <%= pluralize_constant(@child_model) %>: <%= @model_joined_with_child.count %></p>
+    <p><%= pluralize_constant(@parent_model).capitalize %> that have <%= pluralize_constant(@child_model) %>: <%= @model_joined_with_child.count %></p>
     <p>Total <%= pluralize_constant(@child_model) %> created: <%= @child_model.count %></p>
 
     <% @counts.each do |k, v| %>
