@@ -37,11 +37,11 @@ module Growth
     def get_grouped_options
       get_models.map do |model|
         [
-            model,
-            model.reflect_on_all_associations(:has_many).map do |reflection|
-              reflection_source_name = reflection.source_reflection.name.to_s.capitalize
-              [reflection_source_name, "#{model}-#{reflection_source_name}"]
-            end
+          model,
+          model.reflect_on_all_associations(:has_many).map do |reflection|
+            reflection_source_name = reflection.source_reflection.name.to_s.capitalize
+            [reflection_source_name, "#{model}-#{reflection_source_name}"]
+          end
         ]
       end
     end
