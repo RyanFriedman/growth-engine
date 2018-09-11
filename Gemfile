@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'chartkick'
-
 group :staging, :production do
   gem 'rack-timeout'
 end
