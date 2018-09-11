@@ -8,11 +8,11 @@ module Growth
   @@model_blacklist = []
 
   mattr_writer :models_to_measure
-    
+
   def self.models_to_measure
-    @@models_to_measure ||= ::ApplicationRecord.descendants.map(&:name)
+    @@models_to_measure ||= ::ActiveRecord::Base.descendants.collect { |type| type.name } - ::ActiveRecord::Base.send(:subclasses).map(&:name)
   end
-                  
+
   def self.setup
     yield if block_given?
   end
