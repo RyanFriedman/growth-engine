@@ -37,17 +37,26 @@ module Growth
     def get_grouped_options
       get_models.map do |model|
         [
-          model,
-          model.reflect_on_all_associations(:has_many).map do |reflection|
-            reflection_source_name = reflection.source_reflection.name.to_s.capitalize
-            [reflection_source_name, "#{model}-#{reflection_source_name}"]
-          end
+            model,
+            model.reflect_on_all_associations(:has_many).map do |reflection|
+              name = reflection.name.to_s.camelize
+              [name, "#{model}-#{name}"]
+            end
         ]
       end
     end
 
     def pluralize_constant(constant)
       constant.to_s.downcase.pluralize
+    end
+
+    def counts(grouped_models)
+      counts = {}
+      grouped_models&.count&.each do |key, value|
+        counts.has_key?(value) ? counts[value] += 1 : counts[value] = 1
+      end
+
+      counts
     end
   end
 end

@@ -11,19 +11,19 @@
 	</div>
 <% end %>
 
-<% if @parent_model.present? && @child_model.present? %>
+<% if @parent.present? && @child.present? %>
   <div class="mt-2">
-    <p><%= pluralize_constant(@parent_model).capitalize %> that have <%= pluralize_constant(@child_model) %>: <%= @model_joined_with_child.count %></p>
-    <p>Total <%= pluralize_constant(@child_model) %> created: <%= @child_model.count %></p>
+    <p><%= pluralize_constant(@parent).capitalize %> that have <%= pluralize_constant(@child) %> : <%= @joined_model.count %></p>
+    <p>Total <%= pluralize_constant(@child) %> created: <%= @child.count %></p>
 
-    <% @counts.each do |k, v| %>
-      <p><b><%= v %> <%= pluralize_constant(@parent_model) %></b> have <b><%= pluralize(k,  @child_model.to_s.downcase) %> (<%= ( v.to_f / @model_joined_with_child.distinct.count.to_f ).signif(2) * 100 %>% of <%= pluralize_constant(@parent_model).capitalize %>)</b></p>
+    <% counts(@grouped_joined_model).each do |k, v| %>
+      <p><b><%= v %> <%= pluralize_constant(@parent) %></b> have <b><%= pluralize(k,  @child.to_s.downcase) %> (<%= ( v.to_f / @joined_model.distinct.count.to_f ).signif(2) * 100 %>% of <%= pluralize_constant(@parent).capitalize %>)</b></p>
 
-      <% @grouped_model_joined_with_child.having("count(#{pluralize_constant(@child_model)}.id) = ?", k).count.each do |key, value| %>
-         <% parent = @parent_model.find(key) %>
+      <% @grouped_joined_model.having("count(#{pluralize_constant(@child)}.id) = ?", k).count.each do |key, value| %>
+         <% parent = @parent.find(key) %>
 				 					 
-         <% first_child = parent.public_send(pluralize_constant(@child_model))[0].created_at.time %>
-         <% last_child = parent.public_send(pluralize_constant(@child_model))[k-1].created_at.time %>
+         <% first_child = parent.public_send(pluralize_constant(@child))[0].created_at.time %>
+         <% last_child = parent.public_send(pluralize_constant(@child))[k-1].created_at.time %>
 
          <% t = first_child - last_child %>
 
@@ -40,9 +40,9 @@
       <% end %>
 
       <div class="ml-5">
-        <p><%= @seven_days_or_less %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> within 7 days</p>
-        <p><%= @between_seven_and_twenty %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> between 7 and 21 days</p>
-        <p><%= @twenty_one_days_or_more %> of these <%= pluralize_constant(@parent_model) %> created their first and last <%= @child_model.to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
+        <p><%= @seven_days_or_less %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> within 7 days</p>
+        <p><%= @between_seven_and_twenty %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> between 7 and 21 days</p>
+        <p><%= @twenty_one_days_or_more %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
       </div>
     <% end %>
   </div>
