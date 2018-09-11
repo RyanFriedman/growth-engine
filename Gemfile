@@ -4,6 +4,7 @@ gemspec
 
 group :staging, :production do
   gem 'rack-timeout'
+  gem 'sass-rails'
 end
 
 group :development, :test do
