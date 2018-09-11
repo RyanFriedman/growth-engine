@@ -2,10 +2,6 @@ require_dependency "growth/application_controller"
 
 module Growth
   class StatsController < ApplicationController
-    http_basic_authenticate_with name: Growth.username, password: Growth.password
-
-    include StatsHelper
-
     def index
       @year = params[:year].present? ? params[:year] : Date.current.year
 
