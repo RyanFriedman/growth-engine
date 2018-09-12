@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20180911215255) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "customers", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
@@ -19,8 +22,8 @@ ActiveRecord::Schema.define(version: 20180911215255) do
   end
 
   create_table "line_items", force: :cascade do |t|
-    t.integer "product_id"
-    t.integer "order_id"
+    t.bigint "product_id"
+    t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_line_items_on_order_id"
@@ -29,14 +32,14 @@ ActiveRecord::Schema.define(version: 20180911215255) do
 
   create_table "orders", force: :cascade do |t|
     t.string "title"
-    t.integer "customer_id"
+    t.bigint "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer "order_id"
+    t.bigint "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_payments_on_order_id"
@@ -48,4 +51,7 @@ ActiveRecord::Schema.define(version: 20180911215255) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "line_items", "orders"
+  add_foreign_key "line_items", "products"
+  add_foreign_key "payments", "orders"
 end

@@ -85,6 +85,7 @@ GEM
     nio4r (2.3.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    pg (1.1.1)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
       cliver (~> 0.3.1)
@@ -183,6 +184,7 @@ DEPENDENCIES
   database_cleaner
   factory_bot_rails
   growth!
+  pg
   poltergeist
   pry-rails
   rack-timeout
