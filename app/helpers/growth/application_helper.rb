@@ -30,12 +30,8 @@ module Growth
       model.where('extract(day from created_at) = ?', day)
     end
 
-    def get_models
-      @models ||= Growth.models_to_measure - Growth.model_blacklist
-    end
-
     def get_grouped_options
-      get_models.map do |model|
+      Growth.models_to_measure.map do |model|
         [
             model,
             model.reflect_on_all_associations(:has_many).map do |reflection|

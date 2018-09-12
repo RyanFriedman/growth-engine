@@ -15,32 +15,24 @@
 	<div class="col-md-12">
 		<table class="table table-bordered">
 		  <tr>
-		    <td>Title</td>
-		    <td>January</td>
-		    <td>February</td>
-		    <td>March</td>
-		    <td>April</td>
-		    <td>May</td>
-		    <td>June</td>
-		    <td>July</td>
-		    <td>August</td>
-		    <td>September</td>
-		    <td>October</td>
-		    <td>November</td>
-		    <td>December</td>
+		    <th>Title</th>
+		    <th>January</th>
+		    <th>February</th>
+		    <th>March</th>
+		    <th>April</th>
+		    <th>May</th>
+		    <th>June</th>
+		    <th>July</th>
+		    <th>August</th>
+		    <th>September</th>
+		    <th>October</th>
+		    <th>November</th>
+		    <th>December</th>
 		  </tr>
 		  <% resources.each do |resource| %>
 		    <tr>
 		      <td><p><%= pluralize_constant(resource) %></p></td>
-		      <% (1..12).each do |month| %>
-	        	<% current_month_count = by_month(by_year(resource, year), month).count %>
-	        	<% before_current_month_count = by_month(by_year(resource, year), month - 1).count %>
-					
-		        <td>
-							<span><%= by_month(by_year(resource, year), month).count %></span>
-							<span><%= change_in_percentage(current_month_count, before_current_month_count) %></span>
-						</td>
-		      <% end %>
+
 		    </tr>
 		  <% end %>
 		</table>
