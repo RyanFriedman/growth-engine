@@ -7,6 +7,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'support/factory_bot'
 require 'support/features/navigation_helpers'
+require 'support/features/page_elements_helpers'
 
 require 'factories'
 
@@ -23,6 +24,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.include NavigationHelpers, type: :feature
+  config.include PageElementsHelpers, type: :feature
 end
 
 Shoulda::Matchers.configure do |config|
