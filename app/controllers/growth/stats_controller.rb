@@ -12,9 +12,14 @@ module Growth
       @child = get_child_model
 
       @seven_days_or_less, @between_seven_and_twenty, @twenty_one_days_or_more = 0, 0, 0
-      
+
       respond_to do |format|
-        format.html
+        format.html do
+          render :index, locals: {
+              resources: Growth.models_to_measure,
+          }
+        end
+
         format.csv { send_data get_parent_model.to_csv, filename: "#{get_parent_model}-#{Date.today}.csv" }
       end
     end

@@ -47,7 +47,7 @@ module Growth
     end
 
     def pluralize_constant(constant)
-      constant.to_s.downcase.pluralize
+      constant.to_s.pluralize
     end
 
     def counts(grouped_models)
