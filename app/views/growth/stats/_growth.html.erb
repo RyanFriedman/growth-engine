@@ -33,6 +33,13 @@
 		    <tr>
 		      <td><p><%= pluralize_constant(resource) %></p></td>
 
+          <% group_resource_by_month(resource, year).each do |month, stats| %>
+            <td>
+              <span><%= stats[:count] %></span>
+              <span><%= stats[:growth] %></span>
+            </td>
+          <% end %>
+
 		    </tr>
 		  <% end %>
 		</table>

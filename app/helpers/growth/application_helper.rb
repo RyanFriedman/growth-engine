@@ -1,35 +1,5 @@
 module Growth
   module ApplicationHelper
-    def change_in_percentage(new_number, original_number)
-      if new_number == original_number
-        return "0"
-      end
-
-      return "N/A" if original_number <= 0
-
-      if new_number > original_number
-        increase = new_number - original_number
-        increase_in_percentage = (increase / original_number.to_f) * 100
-        "<p class='increase'>+#{increase_in_percentage.round(1)}%</p>".html_safe
-      else
-        decrease = original_number - new_number
-        decrease_in_percentage = (decrease / original_number.to_f) * 100
-        "<p class='decrease'>-#{decrease_in_percentage.round(1)}%</p>".html_safe
-      end
-    end
-
-    def by_month(model, month)
-      model.where('extract(month from created_at) = ?', month)
-    end
-
-    def by_year(model, year)
-      model.where('extract(year from created_at) = ?', year)
-    end
-
-    def by_day(model, day)
-      model.where('extract(day from created_at) = ?', day)
-    end
-
     def get_grouped_options
       Growth.models_to_measure.map do |model|
         [
@@ -57,6 +27,38 @@ module Growth
 
     def signif(signs)
       Float("%.#{signs}g" % self)
+    end
+
+    def group_resource_by_month(resource, year)
+      default_values = {}
+      (1..12).each {|i| default_values[i.to_f] = 0}
+
+      grouped_resource_by_month = resource
+                                      .where('extract(year from created_at) = ?', year)
+                                      .group("date_part('month', created_at)").count
+
+      result = default_values.merge(grouped_resource_by_month)
+
+      result.map do |month, count|
+        [month.to_i, {count: count, growth: get_change_in_percentage(result[month - 1], count)}]
+      end.to_h
+    end
+
+    private
+
+    def get_change_in_percentage(previous_value, current_value)
+      return "0%" if previous_value == current_value
+      return '-' if previous_value.nil? || previous_value == 0
+
+      if current_value > previous_value
+        increase = current_value - previous_value
+        increase_in_percentage = (increase / previous_value.to_f) * 100
+        "+#{increase_in_percentage}%"
+      else
+        decrease = previous_value - current_value
+        decrease_in_percentage = (decrease / previous_value.to_f) * 100
+        "-#{decrease_in_percentage}%"
+      end
     end
   end
 end
