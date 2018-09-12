@@ -3,7 +3,7 @@
 <%= form_tag '/stats', method: :get do %>
 	<div class="row">
 		<div class="col-md-2">
-  		<%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, @year), class: "form-control" %>
+  		<%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, year), class: "form-control" %>
 		</div>
 		<div class="col-md-1">
 			<%= submit_tag("Submit", class: "form-control btn-primary") %>
@@ -29,15 +29,15 @@
 		    <td>November</td>
 		    <td>December</td>
 		  </tr>
-		  <% get_models.each do |model| %>
+		  <% resources.each do |resource| %>
 		    <tr>
-		      <td><p><%= model.to_s.pluralize %></p></td>
+		      <td><p><%= pluralize_constant(resource) %></p></td>
 		      <% (1..12).each do |month| %>
-	        	<% current_month_count = by_month(by_year(model, @year), month).count %>
-	        	<% before_current_month_count = by_month(by_year(model, @year), month - 1).count %>
+	        	<% current_month_count = by_month(by_year(resource, year), month).count %>
+	        	<% before_current_month_count = by_month(by_year(resource, year), month - 1).count %>
 					
 		        <td>
-							<span><%= by_month(by_year(model, @year), month).count %></span>
+							<span><%= by_month(by_year(resource, year), month).count %></span>
 							<span><%= change_in_percentage(current_month_count, before_current_month_count) %></span>
 						</td>
 		      <% end %>

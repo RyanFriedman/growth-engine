@@ -3,8 +3,6 @@ require_dependency "growth/application_controller"
 module Growth
   class StatsController < ApplicationController
     def index
-      @year = params[:year].present? ? params[:year] : Date.current.year
-
       @joined_model = get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).to_sym)
       @grouped_joined_model = grouped_joined_model
 
@@ -16,6 +14,7 @@ module Growth
       respond_to do |format|
         format.html do
           render :index, locals: {
+              year: get_year,
               resources: Growth.models_to_measure,
           }
         end
@@ -44,6 +43,10 @@ module Growth
       if params['models'].present?
         params['models'].split("-").last.singularize.camelize.constantize
       end
+    end
+
+    def get_year
+      params[:year].present? ? params[:year] : Date.current.year
     end
   end
 end
