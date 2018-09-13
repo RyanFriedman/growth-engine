@@ -3,7 +3,7 @@ require_dependency "growth/application_controller"
 module Growth
   class StatsController < ApplicationController
     def index
-      @joined_model = get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).to_sym)
+      @joined_model = get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).downcase.to_sym)
       @grouped_joined_model = grouped_joined_model
 
       @parent = get_parent_model
@@ -34,14 +34,14 @@ module Growth
     end
 
     def get_parent_model
-      if params['models'].present?
-        params['models'].split("-").first.singularize.camelize.constantize
+      if params['association-select'].present?
+        params['association-select'].split("-").first.singularize.camelize.constantize
       end
     end
 
     def get_child_model
-      if params['models'].present?
-        params['models'].split("-").last.singularize.camelize.constantize
+      if params['association-select'].present?
+        params['association-select'].split("-").last.singularize.camelize.constantize
       end
     end
 

@@ -1,9 +1,9 @@
 <h2 class="my-4">Associations</h2>
 
-<%= form_tag '/stats', method: :get, class: 'mb-5' do %>
+<%= form_tag '/growth/stats', method: :get, class: 'mb-5' do %>
 	<div class="row">
 		<div class="col-md-2">
-    	<%= select_tag 'models', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model'), class: "form-control" %>
+    	<%= select_tag 'association-select', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model'), class: "form-control" %>
 		</div>
 		<div class="col-md-1">
 			<%= submit_tag("Submit", class: "btn btn-primary") %>
@@ -13,7 +13,7 @@
 
 <% if @parent.present? && @child.present? %>
   <div class="mt-2">
-    <p><%= pluralize_constant(@parent).capitalize %> that have <%= pluralize_constant(@child) %> : <%= @joined_model.count %></p>
+    <p><%= pluralize_constant(@parent).capitalize %> that have <%= pluralize_constant(@child) %>: <%= @joined_model.distinct.count %></p>
     <p>Total <%= pluralize_constant(@child) %> created: <%= @child.count %></p>
 
     <% counts(@grouped_joined_model).each do |k, v| %>
@@ -22,8 +22,8 @@
       <% @grouped_joined_model.having("count(#{pluralize_constant(@child)}.id) = ?", k).count.each do |key, value| %>
          <% parent = @parent.find(key) %>
 				 					 
-         <% first_child = parent.public_send(pluralize_constant(@child))[0].created_at.time %>
-         <% last_child = parent.public_send(pluralize_constant(@child))[k-1].created_at.time %>
+         <% first_child = parent.public_send(pluralize_constant(@child).downcase)[0].created_at.time %>
+         <% last_child = parent.public_send(pluralize_constant(@child).downcase)[k-1].created_at.time %>
 
          <% t = first_child - last_child %>
 

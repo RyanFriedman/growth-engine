@@ -1,6 +1,6 @@
 <h2 class="my-4">Growth</h2>
 
-<%= form_tag '/stats', method: :get do %>
+<%= form_tag '/growth/stats', method: :get do %>
 	<div class="row">
 		<div class="col-md-2">
   		<%= select_tag 'year', options_for_select((2014..Date.current.year).to_a, year), class: "form-control" %>
