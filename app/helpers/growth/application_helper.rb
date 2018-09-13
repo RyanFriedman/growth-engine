@@ -12,10 +12,6 @@ module Growth
       end
     end
 
-    def pluralize_constant(constant)
-      constant.to_s.pluralize
-    end
-
     def counts(grouped_models)
       counts = {}
       grouped_models&.count&.each do |key, value|
@@ -23,10 +19,6 @@ module Growth
       end
 
       counts
-    end
-
-    def signif(signs)
-      Float("%.#{signs}g" % self)
     end
 
     def group_resource_by_month(resource, year)
@@ -60,5 +52,12 @@ module Growth
         "-#{decrease_in_percentage}%"
       end
     end
+  end
+end
+
+class Float
+  def signif(digits)
+    return 0 if self.zero?
+    self.round(-(Math.log10(self).ceil - digits))
   end
 end
