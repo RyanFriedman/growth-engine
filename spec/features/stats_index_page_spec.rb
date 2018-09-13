@@ -19,11 +19,24 @@ describe 'stats index page' do
     create(:customer_with_order, orders_count: 2)
 
     visit_stats_page
-
-    target_form = all(:xpath, "//form[@action='/growth/stats']").last
-
     submit_select_form(target_form, 'Orders')
 
     expect(page).to have_content('Customers that have Orders: 2')
+  end
+
+  it 'displays sub resources count for main resource' do
+    create(:customer_with_order)
+    create(:customer_with_order, orders_count: 2)
+
+    visit_stats_page
+    submit_select_form(target_form, 'Orders')
+
+    expect(page).to have_content('Total Orders created: 3')
+  end
+
+  private
+
+  def target_form
+    all(:xpath, "//form[@action='/growth/stats']").last
   end
 end
