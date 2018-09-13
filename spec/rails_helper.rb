@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'support/factory_bot'
 require 'support/features/navigation_helpers'
 require 'support/features/page_elements_helpers'
+require 'support/features/form_helpers'
 
 require 'factories'
 
@@ -25,6 +26,7 @@ RSpec.configure do |config|
 
   config.include NavigationHelpers, type: :feature
   config.include PageElementsHelpers, type: :feature
+  config.include FormHelpers, type: :feature
 end
 
 Shoulda::Matchers.configure do |config|
