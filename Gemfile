@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'pg'
+gem 'dry-transaction'
 
 group :staging, :production do
   gem 'rack-timeout'
