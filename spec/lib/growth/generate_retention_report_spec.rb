@@ -5,7 +5,7 @@ RSpec.describe Growth::GenerateRetentionReport do
   describe '#call' do
     it 'generates retention data' do
       create(:customer)
-      create_list(:customer_with_order, 4)
+      create_list(:customer_with_order, 5)
 
       customer =  create(:customer)
       create(:order, created_at: Date.current.beginning_of_month + 7.days, customer: customer)
@@ -15,19 +15,19 @@ RSpec.describe Growth::GenerateRetentionReport do
       expected_result = {
         source_resource: Customer,
         target_resource: Order,
-        total_associated_resources: 5,
-        total_target_resources: 7,
+        total_associated_resources: 6,
+        total_target_resources: 8,
         resources_stats: [
           {
-              total_source_resources_percentage: 80.0,
-              total_source_resources: 4,
+              total_source_resources_percentage: 83.33,
+              total_source_resources: 5,
               total_target_resources: 1,
-              first_seven_days_count: 4,
+              first_seven_days_count: 5,
               middle_period_count: 0,
               end_period_count: 0
           },
           {
-              total_source_resources_percentage: 20.0,
+              total_source_resources_percentage: 16.67,
               total_source_resources: 1,
               total_target_resources: 3,
               first_seven_days_count: 1,

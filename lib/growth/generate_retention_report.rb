@@ -98,7 +98,7 @@ module Growth
     end
 
     def calculate_percentage(number, total)
-      (number.to_f / total.to_f) * 100
+      ((number.to_f / total.to_f) * 100).round(2)
     end
   end
 end
