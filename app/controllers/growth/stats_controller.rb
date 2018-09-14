@@ -1,49 +1,23 @@
 require_dependency "growth/application_controller"
+require_dependency "growth/generate_retention_report"
 
 module Growth
   class StatsController < ApplicationController
     def index
-      @joined_model = get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).downcase.to_sym)
-      @grouped_joined_model = grouped_joined_model
+      resources = Growth.models_to_measure
 
-      @parent = get_parent_model
-      @child = get_child_model
-
-      @seven_days_or_less, @between_seven_and_twenty, @twenty_one_days_or_more = 0, 0, 0
-
-      respond_to do |format|
-        format.html do
-          render :index, locals: {
-              year: get_year,
-              resources: Growth.models_to_measure,
-          }
+      Growth::GenerateRetentionReport.new.call(associations: params['association-select']) do |m|
+        m.success do |result|
+          render :index, locals: {year: get_year, resources: resources, report: result[:report]}
         end
 
-        format.csv { send_data get_parent_model.to_csv, filename: "#{get_parent_model}-#{Date.today}.csv" }
+        m.failure do |result|
+          render :index, locals: {year: get_year, resources: resources, report: result[:report]}
+        end
       end
     end
 
     private
-
-    def get_parent_joined_with_child
-      @joined_model ||= get_parent_model&.unscoped&.joins(pluralize_constant(get_child_model).to_sym)
-    end
-
-    def grouped_joined_model
-      get_parent_joined_with_child&.group(:id)&.order("#{pluralize_constant(get_child_model)}.count ASC")
-    end
-
-    def get_parent_model
-      if params['association-select'].present?
-        params['association-select'].split("-").first.singularize.camelize.constantize
-      end
-    end
-
-    def get_child_model
-      if params['association-select'].present?
-        params['association-select'].split("-").last.singularize.camelize.constantize
-      end
-    end
 
     def get_year
       params[:year].present? ? params[:year] : Date.current.year
