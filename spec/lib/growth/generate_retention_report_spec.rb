@@ -13,28 +13,28 @@ RSpec.describe Growth::GenerateRetentionReport do
       create(:order, created_at: Date.current.end_of_month, customer: customer)
 
       expected_result = {
-          source_resource: Customer,
-          target_resource: Order,
-          total_associated_resources: 5,
-          total_target_resources: 7,
-          resources_stats: [
-              {
-                  total_source_resources_percentage: 80.0,
-                  total_source_resources: 4,
-                  total_target_resources: 1,
-                  first_seven_days_count: 4,
-                  middle_period_count: 0,
-                  end_period_count: 0
-              },
-              {
-                  total_source_resources_percentage: 20.0,
-                  total_source_resources: 1,
-                  total_target_resources: 3,
-                  first_seven_days_count: 1,
-                  middle_period_count: 1,
-                  end_period_count: 1
-              }
-          ]
+        source_resource: Customer,
+        target_resource: Order,
+        total_associated_resources: 5,
+        total_target_resources: 7,
+        resources_stats: [
+          {
+              total_source_resources_percentage: 80.0,
+              total_source_resources: 4,
+              total_target_resources: 1,
+              first_seven_days_count: 4,
+              middle_period_count: 0,
+              end_period_count: 0
+          },
+          {
+              total_source_resources_percentage: 20.0,
+              total_source_resources: 1,
+              total_target_resources: 3,
+              first_seven_days_count: 1,
+              middle_period_count: 1,
+              end_period_count: 1
+          }
+        ]
       }
 
       subject.call(associations: 'Customer-Order') do |m|
@@ -47,28 +47,32 @@ RSpec.describe Growth::GenerateRetentionReport do
 
     context 'when blank data given' do
       it 'returns empty array' do
+        expected_result = {resources_stats: []}
+
         subject.call(associations: nil) do |m|
           m.success {}
-          m.failure {|result| expect(result[:report]).to eql([])}
+          m.failure {|result| expect(result[:report]).to eql(expected_result)}
         end
 
         subject.call(associations: '') do |m|
           m.success {}
-          m.failure {|result| expect(result[:report]).to eql([])}
+          m.failure {|result| expect(result[:report]).to eql(expected_result)}
         end
       end
     end
 
     context 'when invalid associations' do
       it 'returns empty array' do
+        expected_result = {resources_stats: []}
+
         subject.call(associations: 'test') do |m|
           m.success {}
-          m.failure {|result| expect(result[:report]).to eql([])}
+          m.failure {|result| expect(result[:report]).to eql(expected_result)}
         end
 
         subject.call(associations: '') do |m|
           m.success {}
-          m.failure {|result| expect(result[:report]).to eql([])}
+          m.failure {|result| expect(result[:report]).to eql(expected_result)}
         end
       end
     end

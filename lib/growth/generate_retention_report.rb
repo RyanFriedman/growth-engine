@@ -14,7 +14,7 @@ module Growth
 
     def validate(input)
       if input[:associations].blank?
-        Failure({report: []})
+        Failure({report: {resources_stats: []}})
       else
         Success(input)
       end
@@ -25,7 +25,7 @@ module Growth
         source_resource, target_resource = input[:associations].split('-').map(&:constantize)
         Success({source_resource: source_resource, target_resource: target_resource})
       rescue => e
-        Failure({report: [], error: e})
+        Failure({report: {resources_stats: []}, error: e})
       end
     end
 
