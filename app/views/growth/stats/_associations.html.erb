@@ -11,38 +11,18 @@
 	</div>
 <% end %>
 
-<% if @parent.present? && @child.present? %>
+<% if report[:resources_stats].any? %>
   <div class="mt-2">
-    <p><%= pluralize_constant(@parent).capitalize %> that have <%= pluralize_constant(@child) %>: <%= @joined_model.distinct.count %></p>
-    <p>Total <%= pluralize_constant(@child) %> created: <%= @child.count %></p>
+    <p><%= pluralize_constant(report[:source_resource]).capitalize %> that have <%= pluralize_constant(report[:target_resource]) %>: <%= report[:total_associated_resources] %></p>
+    <p>Total <%= pluralize_constant(report[:target_resource]) %> created: <%= report[:total_target_resources] %></p>
 
-    <% counts(@grouped_joined_model).each do |k, v| %>
-      <p><b><%= v %> <%= pluralize_constant(@parent) %></b> have <b><%= pluralize(k,  @child.to_s.downcase) %> (<%= ( v.to_f / @joined_model.distinct.count.to_f ).signif(2) * 100 %>% of <%= pluralize_constant(@parent).capitalize %>)</b></p>
-
-      <% @grouped_joined_model.having("count(#{pluralize_constant(@child)}.id) = ?", k).count.each do |key, value| %>
-         <% parent = @parent.find(key) %>
-				 					 
-         <% first_child = parent.public_send(pluralize_constant(@child).downcase)[0].created_at.time %>
-         <% last_child = parent.public_send(pluralize_constant(@child).downcase)[k-1].created_at.time %>
-
-         <% t = first_child - last_child %>
-
-         <% mm, ss = t.divmod(60) %>
-         <% hh, mm = mm.divmod(60) %>
-         <% dd, hh = hh.divmod(24) %>
-         <% if dd <= 7 %>
-           <% @seven_days_or_less += 1 %>
-         <% elsif dd >= 21 %>
-           <% @twenty_one_days_or_more += 1 %>
-         <% else %>
-           <% @between_seven_and_twenty += 1 %>
-         <% end %>
-      <% end %>
+    <% report[:resources_stats].each do |stats| %>
+      <p><b><%= stats[:total_source_resources] %> <%= pluralize_constant(report[:source_resource]) %></b> have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% of <%= pluralize_constant(report[:source_resource]).capitalize %>)</b></p>
 
       <div class="ml-5">
-        <p><%= @seven_days_or_less %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> within 7 days</p>
-        <p><%= @between_seven_and_twenty %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> between 7 and 21 days</p>
-        <p><%= @twenty_one_days_or_more %> of these <%= pluralize_constant(@parent) %> created their first and last <%= @child.to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
+        <p><%= stats[:first_seven_days_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> within 7 days</p>
+        <p><%= stats[:middle_period_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> between 7 and 21 days</p>
+        <p><%= stats[:end_period_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
       </div>
     <% end %>
   </div>

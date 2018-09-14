@@ -5,7 +5,7 @@ module Growth
         [
             model,
             model.reflect_on_all_associations(:has_many).map do |reflection|
-              name = reflection.name.to_s.camelize
+              name = reflection.name.to_s.singularize.camelize
               [name, "#{model}-#{name}"]
             end
         ]
