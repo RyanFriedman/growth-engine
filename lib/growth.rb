@@ -11,7 +11,6 @@ module Growth
 
   def self.models_to_measure
     @@models_to_measure ||= ::ActiveRecord::Base.descendants.map(&:name) - ::ActiveRecord::Base.send(:subclasses).map(&:name)
-    @@models_to_measure.map(&:constantize)
   end
 
   def self.setup
