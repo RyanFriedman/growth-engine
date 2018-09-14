@@ -74,13 +74,17 @@ module Growth
         )
       end
 
-      Success({
-          source_resource: input[:source_resource],
-          target_resource: input[:target_resource],
-          total_associated_resources: resources_distinct_count,
-          total_target_resources: input[:target_resource].count,
-          resources_stats: report
-      })
+      Success(
+          {
+              report: {
+                  source_resource: input[:source_resource],
+                  target_resource: input[:target_resource],
+                  total_associated_resources: resources_distinct_count,
+                  total_target_resources: input[:target_resource].count,
+                  resources_stats: report
+              }
+          }
+      )
     end
 
     private

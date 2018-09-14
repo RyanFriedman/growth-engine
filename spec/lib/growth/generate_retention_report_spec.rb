@@ -39,7 +39,7 @@ RSpec.describe Growth::GenerateRetentionReport do
 
       subject.call(associations: 'Customer-Order') do |m|
         m.success do |result|
-          expect(result).to eql(expected_result)
+          expect(result[:report]).to eql(expected_result)
         end
         m.failure {}
       end
