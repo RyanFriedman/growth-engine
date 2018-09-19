@@ -1,7 +1,7 @@
 module Growth
   module ApplicationHelper
-    def get_grouped_options
-      Growth.models_to_measure.map do |model|
+    def get_grouped_options(resources)
+      resources.map do |model|
         [
             model,
             model.reflect_on_all_associations(:has_many).map do |reflection|

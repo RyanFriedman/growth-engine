@@ -3,7 +3,7 @@
 <%= form_tag '/growth/stats', method: :get, class: 'mb-5' do %>
 	<div class="row">
 		<div class="col-md-2">
-    	<%= select_tag 'association-select', grouped_options_for_select(get_grouped_options, nil, prompt: 'Select model'), class: "form-control" %>
+    	<%= select_tag 'association-select', grouped_options_for_select(get_grouped_options(resources), nil, prompt: 'Select model'), class: "form-control" %>
 		</div>
 		<div class="col-md-1">
 			<%= submit_tag("Submit", class: "btn btn-primary") %>
