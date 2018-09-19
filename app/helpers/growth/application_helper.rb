@@ -26,6 +26,7 @@ module Growth
       (1..12).each {|i| default_values[i.to_f] = 0}
 
       grouped_resource_by_month = resource
+                                      .unscoped
                                       .where('extract(year from created_at) = ?', year)
                                       .group("date_part('month', created_at)")
                                       .count
