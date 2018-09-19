@@ -4,7 +4,7 @@ require_dependency "growth/generate_retention_report"
 module Growth
   class StatsController < ApplicationController
     def index
-      resources = Growth.models_to_measure
+      resources = Growth.models_to_measure.map(&:constantize)
 
       Growth::GenerateRetentionReport.new.call(associations: params['association-select']) do |m|
         m.success do |result|
