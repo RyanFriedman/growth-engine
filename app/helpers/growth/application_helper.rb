@@ -27,7 +27,8 @@ module Growth
 
       grouped_resource_by_month = resource
                                       .where('extract(year from created_at) = ?', year)
-                                      .group("date_part('month', created_at)").count
+                                      .group("date_part('month', created_at)")
+                                      .count
 
       result = default_values.merge(grouped_resource_by_month)
 
@@ -45,19 +46,12 @@ module Growth
       if current_value > previous_value
         increase = current_value - previous_value
         increase_in_percentage = (increase / previous_value.to_f) * 100
-        "+#{increase_in_percentage}%"
+        "+#{increase_in_percentage.round(2)}%"
       else
         decrease = previous_value - current_value
         decrease_in_percentage = (decrease / previous_value.to_f) * 100
-        "-#{decrease_in_percentage}%"
+        "-#{decrease_in_percentage.round(2)}%"
       end
     end
-  end
-end
-
-class Float
-  def signif(digits)
-    return 0 if self.zero?
-    self.round(-(Math.log10(self).ceil - digits))
   end
 end
