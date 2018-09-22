@@ -15,7 +15,14 @@
 </head>
 <body class="growth">
 	<div class="container-fluid">
-		<%= yield %>
+		<div class="row">
+			<div class="col-md-2 d-none d-md-block bg-purple sidebar">
+				<%= render "navbar", resources: Growth.models_to_measure %>
+			</div>
+			<div class="col-md-10 pl-5">
+				<%= yield %>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

@@ -16,6 +16,20 @@ module Growth
         end
       end
     end
+    
+    def show
+      resource = params[:id].titleize
+      
+      Growth::GenerateRetentionReport.new.call(associations: params['association']) do |m|
+        m.success do |result|
+          render :show, locals: {resource: resource, report: result[:report]}
+        end
+
+        m.failure do |result|
+          render :show, locals: {resource: resource, report: result[:report]}
+        end
+      end
+    end
 
     private
 

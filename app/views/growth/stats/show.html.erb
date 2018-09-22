@@ -1,0 +1,36 @@
+<h4 class="my-4"><%= resource.pluralize %></h4>
+
+<div class="row">
+	<div class="col-md-2">
+		<div class="box">
+			<h6>Daily</h6>
+			<h2>200</h2>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<div class="box">
+			<h6>Month</h6>
+			<h2>500</h2>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<div class="box">
+			<h6>Year</h6>
+			<h2>1000</h2>
+		</div>
+	</div>
+</div>
+
+<h4 class="my-4">Associations</h4>
+
+<div class="row">
+	<div class="col-md-12">
+    <% resource.constantize.reflect_on_all_associations(:has_many).map do |reflection| %>
+     	<span class="mr-3">
+				<%= link_to reflection.name.to_s.singularize.camelize, stat_path(resource, association: "#{resource}-#{reflection.name.to_s.singularize.camelize}"), class: 'child-resource' %>
+			</span>
+		<% end %>
+	
+		<%= render "report", report: report %>
+	</div>
+</div>

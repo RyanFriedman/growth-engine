@@ -13,7 +13,7 @@ module Growth
       end
       
       def setup_routes
-        route 'mount Growth::Engine, at: "/growth/stats"'
+        route 'mount Growth::Engine, at: "/growth"'
       end
     end
   end

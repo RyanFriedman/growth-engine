@@ -1,13 +1,11 @@
 <div class="sidebar-sticky">
 	<ul class="nav flex-column">
 		<li class="nav-link">
-			<h1>GROWTH</h1>
+			<h1><%= link_to "GROWTH", root_path, class: 'logo' %></h1>
 		</li>
     <% resources.each do |resource| %>
       <li class="nav-item">
-        <a class="nav-link active" href="#">
-          <%= resource.to_s.pluralize %> <span class="sr-only">(current)</span>
-        </a>
+				<%= link_to resource.to_s.pluralize, stat_path(resource.to_s.downcase), class: 'nav-link' %>
       </li>
     <% end %>
   </ul>

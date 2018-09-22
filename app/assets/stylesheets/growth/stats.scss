@@ -7,16 +7,18 @@
 	color: #2ecc71;
 	background-color: #e8f5e9;
 	display: inline;
-	padding: 10px;
+	padding: 8px;
 	border-radius: 10em;
+	font-size: 16px;
 }
 
 .decrease {
 	color: #e74c3c;
 	background-color: #ffebee;
 	display: inline;
-	padding: 10px;
+	padding: 8px;
 	border-radius: 10em;
+	font-size: 16px;
 }
 
 .growth {
@@ -43,4 +45,8 @@
 
 body {
 	background-color: rgb(249, 250, 251) !important;
+}
+
+.child-resource {
+	text-decoration: underline;
 }
