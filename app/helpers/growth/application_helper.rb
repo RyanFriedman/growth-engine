@@ -49,6 +49,18 @@ module Growth
       return '' if growth == 0 || growth == '-'
       growth > 0 ? 'increase' : 'decrease'
     end
+    
+    def growth_today(resource)
+      resource.constantize.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+    end
+    
+    def growth_month(resource)
+      resource.constantize.where(created_at: Date.current.beginning_of_month..Date.current.end_of_month).count
+    end
+    
+    def growth_year_to_date(resource)
+      resource.constantize.unscoped.where('extract(year from created_at) = ?', Date.today.year).count
+    end
 
     private
 
