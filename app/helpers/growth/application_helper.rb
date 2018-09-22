@@ -34,24 +34,38 @@ module Growth
       result = default_values.merge(grouped_resource_by_month)
 
       result.map do |month, count|
-        [month.to_i, {count: count, growth: get_change_in_percentage(result[month - 1], count)}]
+        percentage = get_change_in_percentage(result[month - 1], count)
+        [month.to_i, {count: count, growth: percentage_to_string(percentage), css: growth_css_class(percentage)}]
       end.to_h
+    end
+    
+    def percentage_to_string(percentage)
+      return percentage if percentage == '-'
+      return '0%' if percentage == 0 
+      percentage > 0 ? "+#{percentage}%" : "#{percentage}%"
+    end
+      
+    def growth_css_class(growth)
+      return '' if growth == 0 || growth == '-'
+      growth > 0 ? 'increase' : 'decrease'
     end
 
     private
 
     def get_change_in_percentage(previous_value, current_value)
-      return "0%" if previous_value == current_value
+      return 0 if previous_value == current_value
       return '-' if previous_value.nil? || previous_value == 0
 
       if current_value > previous_value
         increase = current_value - previous_value
         increase_in_percentage = (increase / previous_value.to_f) * 100
-        "+#{increase_in_percentage.round(2)}%"
+        
+        increase_in_percentage.round(2)
       else
         decrease = previous_value - current_value
         decrease_in_percentage = (decrease / previous_value.to_f) * 100
-        "-#{decrease_in_percentage.round(2)}%"
+        
+        -decrease_in_percentage.round(2)
       end
     end
   end

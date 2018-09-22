@@ -9,7 +9,6 @@
 	display: inline;
 	padding: 10px;
 	border-radius: 10em;
-	float: right;
 }
 
 .decrease {
@@ -18,7 +17,12 @@
 	display: inline;
 	padding: 10px;
 	border-radius: 10em;
-	float: right;
+}
+
+.growth {
+	h4 {
+		color: #74A9F8;
+	}
 }
 
 .box {

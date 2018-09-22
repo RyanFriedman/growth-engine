@@ -13,12 +13,18 @@ RSpec.describe Growth::ApplicationHelper do
       create(:customer, created_at: Date.parse('2019-01-01'))
 
       expected_result = {
-          1 => {count: 1, growth: '-'}, 2 => {count: 1, growth: '0%'},
-          3 => {count: 0, growth: '-100.0%'}, 4 => {count: 0, growth: '0%'},
-          5 => {count: 0, growth: '0%'}, 6 => {count: 0, growth: '0%'},
-          7 => {count: 0, growth: '0%'}, 8 => {count: 2, growth: '-'},
-          9 => {count: 4, growth: '+100.0%'}, 10 => {count: 0, growth: '-100.0%'},
-          11 => {count: 0, growth: '0%'}, 12 => {count: 0, growth: '0%'}
+          1 => {count: 1, css: '', growth: '-'}, 
+          2 => {count: 1, css: '', growth: '0%'},
+          3 => {count: 0, css: 'decrease', growth: '-100.0%'}, 
+          4 => {count: 0, css: '', growth: '0%'},
+          5 => {count: 0, css: '', growth: '0%'}, 
+          6 => {count: 0, css: '', growth: '0%'},
+          7 => {count: 0, css: '', growth: '0%'}, 
+          8 => {count: 2, css: '', growth: '-'},
+          9 => {count: 4, css: 'increase', growth: '+100.0%'}, 
+          10 => {count: 0, css: 'decrease', growth: '-100.0%'},
+          11 => {count: 0, css: '', growth: '0%'}, 
+          12 => {count: 0, css: '', growth: '0%'}
       }
 
       expect(group_resource_by_month(Customer, 2018)).to eql(expected_result)

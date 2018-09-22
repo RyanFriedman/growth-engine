@@ -1,4 +1,4 @@
-<h2 class="my-4">Growth</h2>
+<h4 class="my-4">Growth</h4>
 
 <%= form_tag '/growth/stats', method: :get do %>
 	<div class="row">
@@ -32,14 +32,13 @@
 		  <% resources.each do |resource| %>
 		    <tr>
 		      <td><p><%= pluralize_constant(resource) %></p></td>
-
+					
           <% group_resource_by_month(resource, year).each do |month, stats| %>
             <td>
-              <span><%= stats[:count] %></span>
-              <span><%= stats[:growth] %></span>
+              <p><%= stats[:count] %></p>
+              <p class="<%= stats[:css] %>"><%= stats[:growth] %></p>
             </td>
           <% end %>
-
 		    </tr>
 		  <% end %>
 		</table>

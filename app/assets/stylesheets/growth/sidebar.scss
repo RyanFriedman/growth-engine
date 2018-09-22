@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 48px 0 0;
+  padding: 0 0 48px 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
@@ -25,4 +25,12 @@
 .flex-column {
   -ms-flex-direction: column!important;
   flex-direction: column!important;
+}
+
+.bg-purple {
+	background-color: #282952; 
+}
+
+.nav-link {
+	color: #FFF;
 }
