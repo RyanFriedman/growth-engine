@@ -6,11 +6,6 @@
     <% report[:resources_stats].each do |stats| %>
       <p><b><%= stats[:total_source_resources] %> <%= pluralize_constant(report[:source_resource]) %></b> have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% of <%= pluralize_constant(report[:source_resource]).capitalize %>)</b></p>
 
-      <div class="ml-5">
-        <p><%= stats[:first_seven_days_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> within 7 days</p>
-        <p><%= stats[:middle_period_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> between 7 and 21 days</p>
-        <p><%= stats[:end_period_count] %> of these <%= pluralize_constant(report[:source_resource]) %> created their first and last <%= report[:target_resource].to_s.downcase %> over 21 days apart (HIGH RETENTION)</p>
-      </div>
     <% end %>
   </div>
 <% end %>

@@ -15,7 +15,7 @@
 	<div class="col-md-12">
 		<table class="table table-bordered">
 		  <tr>
-		    <th>Title</th>
+		    <th></th>
 		    <th>January</th>
 		    <th>February</th>
 		    <th>March</th>
@@ -31,7 +31,7 @@
 		  </tr>
 		  <% resources.each do |resource| %>
 		    <tr>
-		      <td><p><%= pluralize_constant(resource) %></p></td>
+		      <td><b><%= pluralize_constant(resource) %></b></td>
 					
           <% group_resource_by_month(resource, year).each do |month, stats| %>
             <td>

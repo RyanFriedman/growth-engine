@@ -12,7 +12,7 @@ module Growth
   def self.models_to_measure
     @@models_to_measure ||= ::ActiveRecord::Base.descendants.map(&:name) - ::ActiveRecord::Base.send(:subclasses).map(&:name)
   end
-
+  
   def self.setup
     yield if block_given?
   end

@@ -3,6 +3,7 @@ require_dependency "growth/generate_retention_report"
 
 module Growth
   class StatsController < ApplicationController
+    
     def index
       resources = Growth.models_to_measure
 
@@ -19,7 +20,7 @@ module Growth
     
     def show
       resource = params[:id].titleize
-      
+                                              
       Growth::GenerateRetentionReport.new.call(associations: params['association']) do |m|
         m.success do |result|
           render :show, locals: {resource: resource, report: result[:report]}

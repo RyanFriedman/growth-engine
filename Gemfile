@@ -4,6 +4,7 @@ gemspec
 
 gem 'pg'
 gem 'dry-transaction'
+gem 'cohort_me'
 
 group :staging, :production do
   gem 'rack-timeout'
