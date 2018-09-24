@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Growth::Engine => '/growth/stats'
+  mount Growth::Engine, at: "/growth/stats"
 end
