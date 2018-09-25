@@ -31,7 +31,10 @@ ActiveRecord::Schema.define(version: 20180911215255) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "title"
+    t.string "address_line"
+    t.string "address_city"
+    t.string "address_state"
+    t.string "address_zip"
     t.bigint "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
