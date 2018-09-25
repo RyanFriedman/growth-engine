@@ -5,6 +5,7 @@ gemspec
 gem 'pg'
 gem 'dry-transaction'
 gem 'cohort_me'
+gem 'faker'
 
 group :staging, :production do
   gem 'rack-timeout'
