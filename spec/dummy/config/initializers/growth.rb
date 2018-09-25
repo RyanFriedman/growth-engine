@@ -11,13 +11,13 @@ Growth.setup do |config|
   
   # This is your username for securing the '/stats' URL
   # You will be prompted to enter this when viewing the page
-  # This value would be better stored in an environment variabe
+  # This value would be better stored in an environment variable
   #
   Growth.username = 'stats'
   
   # This is your password for securing the /stats page
   # You will be prompted to enter this when viewing the page
-  # This value would be better stored in an environment variabe
+  # This value would be better stored in an environment variable
   #
   Growth.password = 'password'
 end
