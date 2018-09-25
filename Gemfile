@@ -6,6 +6,7 @@ gem 'pg'
 gem 'dry-transaction'
 gem 'cohort_me'
 gem 'faker'
+gem 'groupdate'
 
 group :staging, :production do
   gem 'rack-timeout'
