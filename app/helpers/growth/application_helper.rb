@@ -22,21 +22,22 @@ module Growth
     end
 
     def group_resource_by_month(resource, year)
-      default_values = {}
-      (1..12).each {|i| default_values[i.to_f] = 0}
-
+      previous_year = year.to_i - 1
+      range = Date.parse("#{previous_year}-12-01")..Date.parse("#{year}-12-31")
       grouped_resource_by_month = resource
                                       .unscoped
-                                      .where('extract(year from created_at) = ?', year)
-                                      .group("date_part('month', created_at)")
+                                      .group_by_month(:created_at, range: range)
                                       .count
 
-      result = default_values.merge(grouped_resource_by_month)
+      grouped_resource_by_month.each do |date, count|
+        percentage = get_change_in_percentage(grouped_resource_by_month[date - 1.month].try(:fetch, :count), count)
 
-      result.map do |month, count|
-        percentage = get_change_in_percentage(result[month - 1], count)
-        [month.to_i, {count: count, growth: percentage_to_string(percentage), css: growth_css_class(percentage)}]
-      end.to_h
+        grouped_resource_by_month[date] = {
+            count: count,
+            growth: percentage_to_string(percentage),
+            css: growth_css_class(percentage)
+        }
+      end
     end
     
     def percentage_to_string(percentage)

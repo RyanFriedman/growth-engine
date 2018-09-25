@@ -35,7 +35,7 @@ module Growth
     private
 
     def get_year
-      params[:year].present? ? params[:year] : Date.current.year
+      params[:year].present? ? params[:year].to_i : Date.current.year
     end
   end
 end
