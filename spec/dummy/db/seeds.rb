@@ -1,3 +1,5 @@
+puts 'Start..'
+
 LineItem.destroy_all
 Order.destroy_all
 Customer.destroy_all
@@ -9,17 +11,13 @@ customer_attributes = Array.new(100) do
       email: Faker::Internet.safe_email(name)
   }
 end
-
 customers = Customer.create!(customer_attributes)
 
 product_attributes = YAML.load_file(Rails.root.join('db/seeds/products.yml'))
-
-product_attributes.each do |attributes|
-  Product.create! attributes
-end
+Product.create! product_attributes
 
 customers.each do |customer|
-  (1..3).to_a.sample.times do
+  (1..50).to_a.sample.times do
     order = Order.create!(
         customer: customer,
         address_line: Faker::Address.street_address,
@@ -34,3 +32,5 @@ customers.each do |customer|
     end
   end
 end
+
+puts 'Done.'
