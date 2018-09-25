@@ -4,17 +4,17 @@ require 'growth/generate_retention_report'
 RSpec.describe Growth::GenerateRetentionReport do
   describe '#call' do
     it 'generates retention data' do
-      create(:customer)
-      create_list(:customer_with_order, 5)
+      create(:product)
+      create_list(:product_with_line_item, 5)
 
-      customer =  create(:customer)
-      create(:order, created_at: Date.current.beginning_of_month + 7.days, customer: customer)
-      create(:order, created_at: Date.current.beginning_of_month + 20.days, customer: customer)
-      create(:order, created_at: Date.current.end_of_month, customer: customer)
+      product =  create(:product)
+      create(:line_item, created_at: Date.current.beginning_of_month + 7.days, product: product)
+      create(:line_item, created_at: Date.current.beginning_of_month + 20.days, product: product)
+      create(:line_item, created_at: Date.current.end_of_month, product: product)
 
       expected_result = {
-        source_resource: Customer,
-        target_resource: Order,
+        source_resource: Product,
+        target_resource: LineItem,
         total_associated_resources: 6,
         total_target_resources: 8,
         resources_stats: [
@@ -31,7 +31,7 @@ RSpec.describe Growth::GenerateRetentionReport do
         ]
       }
 
-      subject.call(associations: 'Customer-Order') do |m|
+      subject.call(associations: 'Product-LineItem') do |m|
         m.success do |result|
           expect(result[:report]).to eql(expected_result)
         end

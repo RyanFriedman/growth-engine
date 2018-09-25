@@ -30,8 +30,8 @@ module Growth
     end
 
     def generate(input)
-      resources = input[:source_resource].unscoped.joins(input[:target_resource].to_s.pluralize.downcase.to_sym)
-      grouped_resources = resources.group(:id).order("#{input[:target_resource].to_s.pluralize}.count ASC")
+      resources = input[:source_resource].unscoped.joins(input[:target_resource].to_s.pluralize.underscore.to_sym)
+      grouped_resources = resources.group(:id).order("#{input[:target_resource].to_s.pluralize.underscore}.count ASC")
       resources_distinct_count = resources.distinct.count
 
       report = []
