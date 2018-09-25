@@ -3,6 +3,7 @@ PATH
   specs:
     growth (0.1.0)
       dry-transaction
+      groupdate
       rails (~> 5.0)
 
 GEM
