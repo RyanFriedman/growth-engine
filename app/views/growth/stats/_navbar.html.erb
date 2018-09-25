@@ -5,7 +5,7 @@
 		</li>
     <% resources.each do |resource| %>
       <li class="nav-item">
-				<%= link_to resource.to_s.pluralize, stat_path(resource.to_s.downcase), class: 'nav-link' %>
+				<%= link_to resource.to_s.pluralize, stat_path(resource.to_s.camelize(:lower)), class: 'nav-link' %>
       </li>
     <% end %>
   </ul>

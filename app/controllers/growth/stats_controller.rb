@@ -17,9 +17,9 @@ module Growth
         end
       end
     end
-    
+
     def show
-      resource = params[:id].titleize
+      resource = params[:id].camelize
                                               
       Growth::GenerateRetentionReport.new.call(associations: params['association']) do |m|
         m.success do |result|
