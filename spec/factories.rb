@@ -15,7 +15,10 @@ FactoryBot.define do
   end
 
   factory :order do
-    sequence(:title) { |n| "order ##{n}" }
+    sequence(:address_line) { |n| "Address line ##{n}" }
+    sequence(:address_city) { |n| "Address city ##{n}" }
+    sequence(:address_state) { |n| "Address state ##{n}" }
+    sequence(:address_zip) { |n| "Address zip ##{n}" }
     association :customer
   end
 end

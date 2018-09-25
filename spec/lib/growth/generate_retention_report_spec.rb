@@ -21,18 +21,12 @@ RSpec.describe Growth::GenerateRetentionReport do
           {
               total_source_resources_percentage: 83.33,
               total_source_resources: 5,
-              total_target_resources: 1,
-              first_seven_days_count: 5,
-              middle_period_count: 0,
-              end_period_count: 0
+              total_target_resources: 1
           },
           {
               total_source_resources_percentage: 16.67,
               total_source_resources: 1,
-              total_target_resources: 3,
-              first_seven_days_count: 1,
-              middle_period_count: 1,
-              end_period_count: 1
+              total_target_resources: 3
           }
         ]
       }
