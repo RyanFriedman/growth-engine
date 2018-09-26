@@ -40,8 +40,11 @@ module Growth
       end
     end
 
-    def group_resource_by_year(resource)
-      grouped_resource_by_year = resource.unscoped.group_by_year(:created_at).count
+    def group_resource_by_year(resource, resources)
+      years = years_since_first_resource(resources)
+      range = Date.parse("#{years.first}-01-01")..Date.parse("#{years.last}-12-31")
+
+      grouped_resource_by_year = resource.unscoped.group_by_year(:created_at, range: range).count
 
       grouped_resource_by_year.each do |date, count|
         percentage = get_change_in_percentage(grouped_resource_by_year[date - 1.year].try(:fetch, :count), count)
@@ -66,7 +69,7 @@ module Growth
     end
     
     def growth_today(resource)
-      resource.constantize.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+      resource.constantize.where(created_at: Time.current.beginning_of_day..Time.current.end_of_day).count
     end
     
     def growth_month(resource)
@@ -74,7 +77,17 @@ module Growth
     end
     
     def growth_year_to_date(resource)
-      resource.constantize.unscoped.where('extract(year from created_at) = ?', Date.today.year).count
+      resource.constantize.unscoped.where('extract(year from created_at) = ?', Date.current.year).count
+    end
+
+    def years_since_first_resource(resources)
+      return @years if defined? @years
+
+      mapped_resources = resources.map do |resource|
+        resource.unscoped.order(:created_at).first
+      end.compact.map(&:created_at).sort
+
+      @years = mapped_resources.empty? ? [Date.current.year] : (mapped_resources.first.to_date.year..Date.current.year).to_a
     end
 
     private

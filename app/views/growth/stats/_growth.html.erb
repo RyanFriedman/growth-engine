@@ -52,11 +52,17 @@
 <div class="row mt-2">
   <div class="col-md-12">
     <table class="table table-bordered">
+      <tr>
+        <th></th>
+        <% years_since_first_resource(resources).each do |year| %>
+          <th><%= year %></th>
+        <% end %>
+      </tr>
       <% resources.each do |resource| %>
         <tr>
           <td><b><%= pluralize_constant(resource) %></b></td>
 
-          <% group_resource_by_year(resource).each do |date, stats| %>
+          <% group_resource_by_year(resource, resources).each do |date, stats| %>
             <td>
               <p><%= stats[:count] %></p>
               <p class="<%= stats[:css] %>"><%= stats[:growth] %></p>
