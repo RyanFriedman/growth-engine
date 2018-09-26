@@ -22,52 +22,23 @@ module Growth
     end
 
     def group_resource_by_month(resource, year)
-      previous_year = year.to_i - 1
-      range = Date.parse("#{previous_year}-12-01")..Date.parse("#{year}-12-31")
+      from, to = Date.parse("#{year.to_i - 1}-12-01"), Date.parse("#{year}-12-31")
       grouped_resource_by_month = resource
                                       .unscoped
-                                      .group_by_month(:created_at, range: range)
+                                      .group_by_month(:created_at, range: from..to)
                                       .count
 
-      grouped_resource_by_month.each do |date, count|
-        percentage = get_change_in_percentage(grouped_resource_by_month[date - 1.month].try(:fetch, :count), count)
-
-        grouped_resource_by_month[date] = {
-            count: count,
-            growth: percentage_to_string(percentage),
-            css: growth_css_class(percentage)
-        }
-      end
+      map_grouped_resource(grouped_resource_by_month, 1.month)
     end
 
     def group_resource_by_year(resource, resources)
-      years = years_since_first_resource(resources)
-      range = Date.parse("#{years.first}-01-01")..Date.parse("#{years.last}-12-31")
+      from = Date.parse("#{years_since_first_resource(resources).first}-01-01")
+      to = Date.parse("#{years_since_first_resource(resources).last}-12-31")
 
-      grouped_resource_by_year = resource.unscoped.group_by_year(:created_at, range: range).count
+      grouped_resource_by_year = resource.unscoped.group_by_year(:created_at, range: from..to).count
+      map_grouped_resource(grouped_resource_by_year, 1.year)
+    end
 
-      grouped_resource_by_year.each do |date, count|
-        percentage = get_change_in_percentage(grouped_resource_by_year[date - 1.year].try(:fetch, :count), count)
-
-        grouped_resource_by_year[date] = {
-            count: count,
-            growth: percentage_to_string(percentage),
-            css: growth_css_class(percentage)
-        }
-      end
-    end
-    
-    def percentage_to_string(percentage)
-      return percentage if percentage == '-'
-      return '0%' if percentage == 0 
-      percentage > 0 ? "+#{percentage}%" : "#{percentage}%"
-    end
-      
-    def growth_css_class(growth)
-      return '' if growth == 0 || growth == '-'
-      growth > 0 ? 'increase' : 'decrease'
-    end
-    
     def growth_today(resource)
       resource.constantize.where(created_at: Time.current.beginning_of_day..Time.current.end_of_day).count
     end
@@ -91,6 +62,29 @@ module Growth
     end
 
     private
+
+    def percentage_to_string(percentage)
+      return percentage if percentage == '-'
+      return '0%' if percentage == 0
+      percentage > 0 ? "+#{percentage}%" : "#{percentage}%"
+    end
+
+    def growth_css_class(growth)
+      return '' if growth == 0 || growth == '-'
+      growth > 0 ? 'increase' : 'decrease'
+    end
+
+    def map_grouped_resource(grouped_resource, interval)
+      grouped_resource.each do |date, count|
+        percentage = get_change_in_percentage(grouped_resource[date - interval].try(:fetch, :count), count)
+
+        grouped_resource[date] = {
+            count: count,
+            growth: percentage_to_string(percentage),
+            css: growth_css_class(percentage)
+        }
+      end
+    end
 
     def get_change_in_percentage(previous_value, current_value)
       return 0 if previous_value == current_value
