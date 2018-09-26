@@ -39,6 +39,20 @@ module Growth
         }
       end
     end
+
+    def group_resource_by_year(resource)
+      grouped_resource_by_year = resource.unscoped.group_by_year(:created_at).count
+
+      grouped_resource_by_year.each do |date, count|
+        percentage = get_change_in_percentage(grouped_resource_by_year[date - 1.year].try(:fetch, :count), count)
+
+        grouped_resource_by_year[date] = {
+            count: count,
+            growth: percentage_to_string(percentage),
+            css: growth_css_class(percentage)
+        }
+      end
+    end
     
     def percentage_to_string(percentage)
       return percentage if percentage == '-'
