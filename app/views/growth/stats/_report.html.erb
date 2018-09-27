@@ -4,8 +4,14 @@
     <p>Total <%= pluralize_constant(report[:target_resource]) %> created: <%= report[:total_target_resources] %></p>
 
     <% report[:resources_stats].each do |stats| %>
-      <p><b><%= stats[:total_source_resources] %> <%= pluralize_constant(report[:source_resource]) %></b> have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% of <%= pluralize_constant(report[:source_resource]).capitalize %>)</b></p>
-
+      <p>
+        <b>
+          <%= stats[:total_source_resources] %> <%= pluralize_constant(report[:source_resource]) %></b> have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% of <%= pluralize_constant(report[:source_resource]).capitalize %>)
+        </b>
+        <% if report[:source_resource].has_attribute? :email %>
+          <%= link_to 'export emails to csv', stat_path(report[:source_resource], format: 'csv', resources_ids: stats[:total_source_resources_ids]), class: 'ml-3' %>
+        <% end %>
+      </p>
     <% end %>
   </div>
 <% end %>
