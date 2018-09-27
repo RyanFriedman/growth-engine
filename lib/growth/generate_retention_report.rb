@@ -36,12 +36,13 @@ module Growth
 
       report = []
 
-      get_counts(grouped_resources).each do |source_resource_associations_count, source_resources_count|
+      invert(grouped_resources.count).each do |count, source_resources_ids|
         report.push(
             {
-                total_source_resources_percentage: calculate_percentage(source_resources_count, resources_distinct_count),
-                total_source_resources: source_resources_count,
-                total_target_resources: source_resource_associations_count
+                total_source_resources_percentage: calculate_percentage(source_resources_ids.count, resources_distinct_count),
+                total_source_resources: source_resources_ids.count,
+                total_target_resources: count,
+                total_source_resources_ids: source_resources_ids.sort
             }
         )
       end
@@ -61,16 +62,12 @@ module Growth
 
     private
 
-    def get_counts(grouped_resources)
-      counts = {}
-      grouped_resources.count.each do |resource_id, count|
-        counts.has_key?(count) ? counts[count] += 1 : counts[count] = 1
-      end
-      counts
-    end
-
     def calculate_percentage(number, total)
       ((number.to_f / total.to_f) * 100).round(2)
+    end
+
+    def invert(hash)
+      hash.each_with_object({}){|(k,v),o|(o[v]||=[])<<k}
     end
   end
 end
