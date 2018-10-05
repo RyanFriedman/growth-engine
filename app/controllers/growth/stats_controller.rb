@@ -1,7 +1,7 @@
 require 'csv'
 
 require_dependency "growth/application_controller"
-require_dependency "growth/generate_retention_report"
+require_dependency "growth/transactions/generate_retention_report"
 
 module Growth
   class StatsController < ApplicationController
@@ -16,7 +16,7 @@ module Growth
 
       respond_to do |format|
         format.html do
-          Growth::GenerateRetentionReport.new.call(associations: params['association']) do |m|
+          Growth::Transactions::GenerateRetentionReport.new.call(associations: params['association']) do |m|
             m.success do |result|
               render :show, locals: {resource: resource, report: result[:report]}
             end
@@ -52,5 +52,6 @@ module Growth
         end
       end
     end
+
   end
 end

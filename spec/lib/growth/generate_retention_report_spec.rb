@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'growth/generate_retention_report'
+require 'growth/transactions/generate_retention_report'
 
-RSpec.describe Growth::GenerateRetentionReport do
+RSpec.describe Growth::Transactions::GenerateRetentionReport do
   describe '#call' do
     it 'generates retention data' do
       create(:product)
