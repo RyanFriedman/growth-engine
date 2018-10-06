@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     growth (0.1.0)
+      dry-container
       dry-transaction
       groupdate
       rails (~> 5.0)
@@ -212,6 +213,7 @@ DEPENDENCIES
   awesome_print
   cohort_me
   database_cleaner
+  dry-container
   dry-transaction
   factory_bot_rails
   faker
