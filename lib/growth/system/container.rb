@@ -25,12 +25,6 @@ module Growth
             end
           end
         end
-
-        namespace "transactions" do
-          register "retention_report" do
-            Growth::Transactions::RetentionReport.new
-          end
-        end
       end
     end
   end
