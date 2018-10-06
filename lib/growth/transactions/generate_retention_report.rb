@@ -3,10 +3,6 @@ module Growth
     class GenerateRetentionReport
       include Dry::Transaction
 
-      INCREMENT_BY_ONE = 1
-      SEVEN_DAYS = 7
-      TWENTY_DAYS = 20
-
       step :validate
       step :prepare
       step :generate
