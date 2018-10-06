@@ -5,16 +5,11 @@ module Growth
         include Dry::Transaction::Operation
 
         def call(input)
-          resources = input[:source_resource].unscoped.joins(input[:target_resource].to_s.pluralize.underscore.to_sym)
-          grouped_resources = resources.group(:id).order("#{input[:target_resource].to_s.pluralize.underscore}.count ASC")
-          resources_distinct_count = resources.distinct.count
-
           report = []
-
-          invert(grouped_resources.count).each do |count, source_resources_ids|
+          input[:grouped_resources_count].each do |count, source_resources_ids|
             report.push(
                 {
-                    total_source_resources_percentage: calculate_percentage(source_resources_ids.count, resources_distinct_count),
+                    total_source_resources_percentage: calculate_percentage(source_resources_ids.count, input[:resources_distinct_count]),
                     total_source_resources: source_resources_ids.count,
                     total_target_resources: count,
                     total_source_resources_ids: source_resources_ids.sort
@@ -27,7 +22,7 @@ module Growth
                   report: {
                       source_resource: input[:source_resource],
                       target_resource: input[:target_resource],
-                      total_associated_resources: resources_distinct_count,
+                      total_associated_resources: input[:resources_distinct_count],
                       total_target_resources: input[:target_resource].count,
                       resources_stats: report
                   }
@@ -39,10 +34,6 @@ module Growth
 
         def calculate_percentage(number, total)
           ((number.to_f / total.to_f) * 100).round(2)
-        end
-
-        def invert(hash)
-          hash.each_with_object({}){|(k,v),o|(o[v]||=[])<<k}
         end
       end
     end
