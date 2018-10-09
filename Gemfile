@@ -4,6 +4,7 @@ gemspec
 
 gem 'pg'
 gem 'dry-transaction'
+gem 'dry-container'
 gem 'cohort_me'
 gem 'faker'
 gem 'groupdate'

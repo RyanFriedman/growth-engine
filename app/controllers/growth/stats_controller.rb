@@ -1,7 +1,7 @@
 require 'csv'
 
 require_dependency "growth/application_controller"
-require_dependency "growth/generate_retention_report"
+require_dependency "growth/transactions/generate_retention_report"
 
 module Growth
   class StatsController < ApplicationController
@@ -16,7 +16,7 @@ module Growth
 
       respond_to do |format|
         format.html do
-          Growth::GenerateRetentionReport.new.call(associations: params['association']) do |m|
+          Growth::Transactions::GenerateRetentionReport.new.call(associations: params['association']) do |m|
             m.success do |result|
               render :show, locals: {resource: resource, report: result[:report]}
             end
@@ -28,9 +28,25 @@ module Growth
         end
 
         format.csv do
-          resources = resource.constantize.find(params[:resources_ids])
+          source_resources_count = params[:source_resources_count].to_i
+          target_resources_count = params[:target_resources_count].to_i
 
-          send_data to_csv(resources), filename: "#{resource.pluralize}-#{Date.today}.csv"
+          Growth::Transactions::GenerateRetentionReport.new.call(associations: params['association']) do |m|
+            m.success do |result|
+              stats = result[:report][:resources_stats].find do |stats|
+                stats[:total_source_resources] == source_resources_count
+                stats[:total_target_resources] == target_resources_count
+              end
+
+              resources = resource.constantize.find(stats[:total_source_resources_ids])
+
+              send_data to_csv(resources), filename: "#{resource.pluralize}-#{Date.today}.csv"
+            end
+
+            m.failure do |result|
+              raise 'failed to export csv'
+            end
+          end
         end
       end
     end
