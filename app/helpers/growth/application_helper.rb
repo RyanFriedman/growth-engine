@@ -60,7 +60,12 @@ module Growth
 
       @years = mapped_resources.empty? ? [Date.current.year] : (mapped_resources.first.to_date.year..Date.current.year).to_a
     end
-
+    
+    def pluralize_constant(count = nil, constant)
+      return constant.to_s.pluralize if count == nil
+      return pluralize(count, constant.to_s)
+    end
+    
     private
 
     def percentage_to_string(percentage)
