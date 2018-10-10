@@ -32,6 +32,20 @@
 	box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.1); 
 }
 
+.bg-blue {
+	background-color: #0b7ef4;
+	box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.1); 
+}
+
 .nav-link, .logo {
+	color: #FFF;
+}
+
+.nav-item:hover {
+	background-color: #499df4;
+	border-right: 2px solid #fff;
+}
+
+.nav-item:hover a {
 	color: #FFF;
 }

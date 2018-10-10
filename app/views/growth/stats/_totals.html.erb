@@ -1,11 +1,11 @@
-<h4 class="my-4">Totals</h4>
+<h5 class="my-4 blue-text">Totals</h5>
 
 <div class="row">
   <% resources.each do |resource| %>
 		<div class="col-md-2">
 			<div class="box">
-				<h6><%= pluralize_constant(resource) %></h6>
-				<h2><%= number_with_delimiter(resource.count, delimiter: ",") %></h2>
+				<p><%= pluralize_constant(resource) %></p>
+				<h4><%= number_with_delimiter(resource.count, delimiter: ",") %></h4>
 			</div>
 		</div>
 	<% end %>

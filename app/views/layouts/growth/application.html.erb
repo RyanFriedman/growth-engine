@@ -16,8 +16,8 @@
 <body class="growth">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-2 d-none d-md-block bg-purple sidebar">
-				<%= render "navbar", resources: Growth.models_to_measure %>
+			<div class="col-md-2 d-none d-md-block bg-blue sidebar px-0">
+				<%= render "sidebar", resources: Growth.models_to_measure %>
 			</div>
 			<div class="col-md-10 pl-3">
 				<%= yield %>

@@ -1,7 +1,9 @@
 <div class="sidebar-sticky">
 	<ul class="nav flex-column">
 		<li class="nav-link">
-			<h1><%= link_to "GROWTH", root_path, class: 'logo' %></h1>
+			<%= link_to root_path do %>
+			  <h3 class="logo"><b>Blitz</b>Scale</h3>
+			<% end %>
 		</li>
     <% resources.each do |resource| %>
       <li class="nav-item">
