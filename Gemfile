@@ -8,6 +8,7 @@ gem 'dry-container'
 gem 'cohort_me'
 gem 'faker'
 gem 'groupdate'
+gem 'jquery-rails'
 
 group :staging, :production do
   gem 'rack-timeout'
