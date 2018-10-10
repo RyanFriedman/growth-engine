@@ -36,4 +36,16 @@ describe 'customer page' do
     expect(page).to have_content('2 Customers have 1 order (40.0% of Customers)')
     expect(page).to have_content('3 Customers have 2 orders (60.0% of Customers)')
   end
+
+  it 'shows export to csv links' do
+    create(:customer)
+
+    create_list(:customer_with_order, 2)
+    create_list(:customer_with_order, 3, orders_count: 2)
+
+    click_link('Order')
+
+    expect(page).to have_link('export emails to csv', href: '/growth/stats/Customer.csv?association=Customer-Order&source_resources_count=2&target_resources_count=1')
+    expect(page).to have_link('export emails to csv', href: '/growth/stats/Customer.csv?association=Customer-Order&source_resources_count=3&target_resources_count=2')
+  end
 end
