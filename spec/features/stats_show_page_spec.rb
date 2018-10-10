@@ -56,4 +56,16 @@ describe 'stats show page' do
     expect(page).to have_link('export emails to csv', href: '/growth/stats/Customer.csv?association=Customer-Order&source_resources_count=2&target_resources_count=1')
     expect(page).to have_link('export emails to csv', href: '/growth/stats/Customer.csv?association=Customer-Order&source_resources_count=3&target_resources_count=2')
   end
+
+  context 'when resource does not have EMAIL attribute' do
+    let(:resource) {'product'}
+
+    it 'hides export to csv link' do
+      create(:product_with_line_item)
+
+      click_link('LineItem')
+
+      expect(page).to_not have_link('export emails to csv' )
+    end
+  end
 end
