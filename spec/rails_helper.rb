@@ -5,6 +5,7 @@ require File.expand_path('../../spec/dummy/config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/poltergeist'
 require 'support/factory_bot'
 require 'support/features/navigation_helpers'
 require 'support/features/page_elements_helpers'
@@ -35,3 +36,11 @@ Shoulda::Matchers.configure do |config|
     with.library :active_record
   end
 end
+
+Capybara.javascript_driver = :poltergeist
+Capybara.register_driver :poltergeist do |app|
+  options = { phantomjs_options: ["--load-images=no"] }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
+
+Capybara.server = :puma, { Silent: true }
