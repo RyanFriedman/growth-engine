@@ -5,13 +5,13 @@ describe Growth::StatsController do
 
   describe 'GET show' do
     it 'exports emails to CSV' do
-      create(:customer)
-      brandon = create(:customer, email: 'brandon@gmail.com')
-      ryan = create(:customer, email: 'ryan@gmail.com')
+      customer = create(:customer, email: 'brandon@gmail.com')
 
-      get :show, params: {id: 'Customer', resources_ids: [brandon.id, ryan.id]}, format: :csv
+      create_list(:order, 2, customer: customer)
 
-      expect(response.body).to eql("email\nryan@gmail.com\nbrandon@gmail.com\n")
+      get :show, params: {id: 'Customer', association: 'Customer-Order', source_resources_count: '1', target_resources_count: '2'}, format: :csv
+
+      expect(response.body).to eql("email\nbrandon@gmail.com\n")
     end
   end
 end
