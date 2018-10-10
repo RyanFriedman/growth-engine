@@ -9,6 +9,7 @@ gem 'cohort_me'
 gem 'faker'
 gem 'groupdate'
 gem 'jquery-rails'
+gem 'puma'
 
 group :staging, :production do
   gem 'rack-timeout'
