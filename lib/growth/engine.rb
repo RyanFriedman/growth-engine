@@ -1,5 +1,4 @@
 require "rubygems"
-require "pry"
 require "dry-transaction"
 
 module Growth
