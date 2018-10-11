@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Ryan Friedman"]
   s.email       = ["ryan@soundtribe.com"]
   s.homepage    = "http://vibrantlight.co"
-  s.summary     = "Monitor the growth of your Rails database"
-  s.description = "Make what you measure and get beatiful charts and statistics about your Rails application"
+  s.summary     = "A beautiful dashboard displaying the monthly and yearly growth of your Rails models."
+  s.description = "A beautiful dashboard displaying the monthly and yearly growth of your Rails models."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
