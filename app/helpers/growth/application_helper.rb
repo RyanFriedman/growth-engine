@@ -12,15 +12,6 @@ module Growth
       end
     end
 
-    def counts(grouped_models)
-      counts = {}
-      grouped_models&.count&.each do |key, value|
-        counts.has_key?(value) ? counts[value] += 1 : counts[value] = 1
-      end
-
-      counts
-    end
-
     def group_resource_by_month(resource, year)
       from, to = Date.parse("#{year.to_i - 1}-12-01"), Date.parse("#{year}-12-31")
       grouped_resource_by_month = resource
@@ -63,9 +54,13 @@ module Growth
     
     def pluralize_constant(count = nil, constant)
       return constant.to_s.pluralize if count == nil
-      return pluralize(count, constant.to_s)
+      pluralize(count, constant.to_s)
     end
-    
+
+    def flash_message
+      content_tag(:div, flash[:notice], class: 'alert alert-primary')
+    end
+
     private
 
     def percentage_to_string(percentage)
