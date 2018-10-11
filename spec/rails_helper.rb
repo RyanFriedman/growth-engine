@@ -44,3 +44,4 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 Capybara.server = :puma, { Silent: true }
+Capybara.default_max_wait_time = 3
