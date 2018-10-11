@@ -58,7 +58,9 @@ module Growth
     end
 
     def flash_message
-      content_tag(:div, flash[:notice], class: 'alert alert-primary')
+      if flash[:notice]
+        content_tag(:div, flash[:notice], class: 'alert alert-primary')
+      end
     end
 
     private

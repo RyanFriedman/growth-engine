@@ -3,22 +3,30 @@
     <p><%= pluralize_constant(report[:source_resource]).capitalize %> that have <%= pluralize_constant(report[:target_resource]) %>: <%= report[:total_associated_resources] %></p>
     <p>Total <%= pluralize_constant(report[:target_resource]) %> created: <%= report[:total_target_resources] %></p>
 
-    <% report[:resources_stats].each do |stats| %>
-      <p>
-        <b><%= pluralize_constant(stats[:total_source_resources], report[:source_resource]) %></b> 
-				have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% 
-					of <%= pluralize_constant(report[:source_resource]).capitalize %>)
-        </b>
-        <% if report[:source_resource].has_attribute? :email %>
-          <%= link_to 'export emails to csv', stat_path(report[:source_resource],
-                                                        format: 'csv',
-                                                        association: "#{report[:source_resource]}-#{report[:target_resource]}",
-                                                        source_resources_count: stats[:total_source_resources],
-                                                        target_resources_count: stats[:total_target_resources]),
-                      class: 'ml-3'
-          %>
-        <% end %>
-      </p>
+    <%= form_tag new_email_path, remote: true, method: :get do %>
+
+      <%= submit_tag 'Write email' %>
+
+      <% report[:resources_stats].each do |stats| %>
+        <p>
+          <label>
+            <%= check_box_tag 'source_resource_ids[]', stats[:total_source_resources_ids] %>
+            <b>
+              <%= stats[:total_source_resources] %> <%= pluralize_constant(report[:source_resource]) %></b> have <b><%= pluralize(stats[:total_target_resources], report[:target_resource].to_s.downcase) %> (<%= stats[:total_source_resources_percentage] %>% of <%= pluralize_constant(report[:source_resource]).capitalize %>)
+            </b>
+          </label>
+          <% if report[:source_resource].has_attribute? :email %>
+            <%= link_to 'export emails to csv', stat_path(report[:source_resource],
+                                                          format: 'csv',
+                                                          association: "#{report[:source_resource]}-#{report[:target_resource]}",
+                                                          source_resources_count: stats[:total_source_resources],
+                                                          target_resources_count: stats[:total_target_resources]),
+                        class: 'ml-3'
+            %>
+          <% end %>
+        </p>
+      <% end %>
+
     <% end %>
   </div>
 <% end %>
