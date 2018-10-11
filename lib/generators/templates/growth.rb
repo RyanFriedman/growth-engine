@@ -13,11 +13,11 @@ Growth.setup do |config|
   # You will be prompted to enter this when viewing the page
   # This value would be better stored in an environment variabe
   #
-  # Growth.username = ENV['growth_username']
+  # Growth.username = ENV.fetch[:growth_username]
   
   # This is your password for securing the /stats page
   # You will be prompted to enter this when viewing the page
   # This value would be better stored in an environment variabe
   #
-  # Growth.password = ENV['growth_password']
+  # Growth.password = ENV.fetch[:growth_password]
 end
