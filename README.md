@@ -52,4 +52,4 @@ Options in your config file are:
 ```Growth.password``` is your password for http_basic_auth
 
 ## License
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Please see <a href="https://github.com/VibrantLight/growth/blob/master/LICENSE">LICENSE</a> for licensing details.
