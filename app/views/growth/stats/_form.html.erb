@@ -1,0 +1,29 @@
+<%= form_tag emails_path do %>
+  <%= hidden_field_tag 'resources_ids[]', resources_ids %>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="col-form-label w-100">
+        From:
+        <%= text_field_tag :from, nil, class: 'form-control' %>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label class="col-form-label w-100">
+        Subject:
+        <%= text_field_tag :subject, nil, class: 'form-control' %>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label class="col-form-label w-100">
+        body:
+        <%= text_area_tag :body, nil, class: 'form-control' %>
+      </label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <%= submit_tag 'Send emails', class: 'btn btn-primary' %>
+  </div>
+<% end %>
