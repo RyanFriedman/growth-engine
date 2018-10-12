@@ -1,8 +1,6 @@
 # GrowthEngine
 Measure the yearly and monthly growth of your Rails models with a dashboard mounted on your Rails app.  Specify the models you'd like to measure in a single initializer file and that's it, the gem will handle the rest.
 
-A more advanced feature in the gem allows you to better understand the associations between your models.  For example, let's say you have a Users model that has_many Posts.  Over time you might wonder, how many users have only created one post?  Which user has created the most posts?  Rather than write these database queries each time, the growth gem will automatically generate these reports for you.
-
 ## Installation
 Add the following line to your Gemfile:
 ```ruby
@@ -50,6 +48,14 @@ Options in your config file are:
 ```Growth.username ``` is your username for http_basic_auth
 
 ```Growth.password``` is your password for http_basic_auth
+
+## Screenshots
+
+<img src="https://github.com/VibrantLight/growth/blob/master/examples/growth.png" style="max-width:100%;">
+
+A more advanced feature in the gem allows you to better understand the associations between your models.  For example, let's say you have a Users model that has_many Posts.  Over time you might wonder, how many users have only created one post?  Which user has created the most posts?  Rather than write these database queries each time, the growth gem will automatically generate these reports for you.
+
+<img src="https://github.com/VibrantLight/growth/blob/master/examples/associations.png" style="max-width:100%;">
 
 ## License
 Please see <a href="https://github.com/VibrantLight/growth/blob/master/LICENSE">LICENSE</a> for licensing details.
