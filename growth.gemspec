@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.version     = Growth::VERSION
   s.authors     = ["Ryan Friedman"]
   s.email       = ["ryan@soundtribe.com"]
-  s.homepage    = "https://github.com/VibrantLight/growth"
+  s.homepage    = "https://github.com/RyanFriedman/growth-engine"
   s.summary     = "A beautiful dashboard displaying the monthly and yearly growth of your Rails models."
   s.description = "Track the monthly and yearly growth of your Rails models along with their associations."
-  s.license     = "MIT"
+  s.license     = "LGPL-3.0"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
