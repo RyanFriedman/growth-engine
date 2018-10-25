@@ -48,7 +48,7 @@ module Growth
     end
     
     def growth_year_to_date(resource)
-      resource.constantize.unscoped.where('extract(year from created_at) = ?', Date.current.year).count
+      resource.constantize.unscoped.where(created_at: Time.current.beginning_of_year..Time.current.end_of_year).count
     end
 
     def years_since_first_resource(resources)
