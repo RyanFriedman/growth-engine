@@ -7,7 +7,7 @@ require "growth/version"
 Gem::Specification.new do |s|
   s.name        = "growth"
   s.version     = Growth::VERSION
-  s.authors     = ["Ryan Friedman"]
+  s.authors     = ["Ryan Friedman", "Nursultan Abdyldaev"]
   s.email       = ["ryan@soundtribe.com"]
   s.homepage    = "https://github.com/RyanFriedman/growth-engine"
   s.summary     = "A beautiful dashboard displaying the monthly and yearly growth of your Rails models."
