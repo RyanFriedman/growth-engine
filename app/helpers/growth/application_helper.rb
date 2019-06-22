@@ -1,3 +1,5 @@
+require "groupdate"
+
 module Growth
   module ApplicationHelper
     def get_grouped_options(resources)

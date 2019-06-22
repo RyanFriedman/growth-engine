@@ -6,7 +6,7 @@ require_dependency "growth/transactions/generate_retention_report"
 module Growth
   class StatsController < ApplicationController
     def index
-      resources = Growth.models_to_measure
+      resources = Growth.models_to_measure.map(&:constantize)
 
       render :index, locals: {year: get_year, resources: resources}
     end

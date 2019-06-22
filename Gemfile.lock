@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    growth (0.1.7)
+    growth (0.1.8)
       dry-container
       dry-transaction
       groupdate

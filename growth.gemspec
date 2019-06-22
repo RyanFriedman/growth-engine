@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency("dry-container")
   s.add_dependency("dry-transaction")
   s.add_dependency("groupdate")
-
+  
   s.add_development_dependency "sqlite3"
 end
